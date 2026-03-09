@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Código Civil PY — Arts. 277–416</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #c8102e;
+  --red-dark: #9e0c24;
+  --red-pale: #fff0f2;
+  --black: #0d0d0d;
+  --dark: #1a1a1a;
+  --grey: #2e2e2e;
+  --mid: #666;
+  --light: #aaa;
+  --border: #e0e0e0;
+  --white: #ffffff;
+  --bg: #f7f7f7;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--black); min-height: 100vh; font-size: 15px; }
+
+/* TOP BAR */
+.topbar { background: var(–red); color: white; text-align: center; padding: 0.42rem 1rem; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+.topbar span { opacity: 0.6; margin: 0 0.5rem; }
+
+/* HEADER */
+header { background: var(–black); position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 16px rgba(0,0,0,0.5); }
+.hinner { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+.hmain { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 0 0.75rem; gap: 1rem; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 0.85rem; }
+.brand-bar { width: 4px; height: 34px; background: var(–red); border-radius: 2px; flex-shrink: 0; }
+.brand h1 { font-family: ‘Bebas Neue’, sans-serif; font-size: 1.5rem; color: white; letter-spacing: 0.06em; line-height: 1; }
+.brand-sub { font-size: 0.64rem; color: var(–light); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.2rem; font-weight: 300; }
+.art-badge { background: var(–red); color: white; padding: 0.38rem 0.85rem; border-radius: 4px; font-family: ‘Bebas Neue’, sans-serif; font-size: 1.05rem; letter-spacing: 0.08em; white-space: nowrap; }
+.art-badge small { display: block; font-family: ‘Inter’, sans-serif; font-size: 0.57rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.8; margin-bottom: 0.05rem; }
+
+/* SEARCH */
+.srow { display: flex; gap: 0.55rem; padding-bottom: 0.85rem; flex-wrap: wrap; }
+.swrap { position: relative; flex: 1; min-width: 180px; }
+.sicon { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); color: #555; pointer-events: none; display: flex; }
+#searchInput { width: 100%; padding: 0.62rem 1rem 0.62rem 2.4rem; background: #1f1f1f; border: 1px solid #2e2e2e; border-radius: 6px; color: white; font-family: ‘Inter’, sans-serif; font-size: 0.83rem; outline: none; transition: border-color 0.2s; }
+#searchInput::placeholder { color: #4a4a4a; }
+#searchInput:focus { border-color: var(–red); }
+.jwrap { display: flex; gap: 0.35rem; }
+.jwrap input { width: 66px; padding: 0.62rem 0.45rem; background: #1f1f1f; border: 1px solid #2e2e2e; border-radius: 6px; color: white; font-family: ‘Inter’, sans-serif; font-size: 0.83rem; text-align: center; outline: none; transition: border-color 0.2s; }
+.jwrap input:focus { border-color: var(–red); }
+.jwrap input::placeholder { color: #4a4a4a; }
+.btn-go { padding: 0.62rem 1rem; background: var(–red); border: none; border-radius: 6px; color: white; font-family: ‘Inter’, sans-serif; font-size: 0.8rem; font-weight: 600; cursor: pointer; letter-spacing: 0.04em; transition: background 0.15s, transform 0.1s; white-space: nowrap; }
+.btn-go:hover { background: var(–red-dark); }
+.btn-go:active { transform: scale(0.97); }
+
+/* FILTER BAR */
+.fbar { background: var(–dark); border-top: 1px solid #242424; overflow-x: auto; scrollbar-width: none; }
+.fbar::-webkit-scrollbar { display: none; }
+.finner { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; display: flex; gap: 0.25rem; align-items: center; height: 42px; }
+.fb { padding: 0.28rem 0.85rem; border-radius: 20px; border: 1px solid #333; background: transparent; color: #777; font-size: 0.72rem; cursor: pointer; font-family: ‘Inter’, sans-serif; font-weight: 500; transition: all 0.15s; white-space: nowrap; }
+.fb:hover { border-color: var(–red); color: var(–red); }
+.fb.active { background: var(–red); border-color: var(–red); color: white; }
+
+/* INFO */
+.infobar { max-width: 1140px; margin: 0 auto; padding: 0.8rem 1.5rem 0; font-size: 0.73rem; color: var(–mid); }
+
+/* LAYOUT */
+.layout { max-width: 1140px; margin: 1.1rem auto 0; padding: 0 1.5rem 5rem; display: grid; grid-template-columns: 196px 1fr; gap: 1.4rem; align-items: start; }
+
+/* SIDEBAR */
+.sidebar { position: sticky; top: 142px; background: white; border-radius: 8px; border: 1px solid var(–border); overflow: hidden; }
+.sb-head { background: var(–black); color: var(–red); padding: 0.7rem 1rem; font-family: ‘Bebas Neue’, sans-serif; font-size: 0.93rem; letter-spacing: 0.1em; }
+.chlist { max-height: 65vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #ddd transparent; }
+.chitem { padding: 0.52rem 1rem; font-size: 0.73rem; cursor: pointer; color: var(–mid); border-left: 3px solid transparent; transition: all 0.15s; line-height: 1.3; }
+.chitem:hover { background: var(–red-pale); color: var(–red); border-left-color: var(–red); }
+.chitem.active { background: var(–red-pale); color: var(–red-dark); border-left-color: var(–red-dark); font-weight: 600; }
+.chrange { display: block; font-size: 0.61rem; color: #bbb; margin-bottom: 0.08rem; }
+
+/* ARTICLES */
+.alist { display: flex; flex-direction: column; gap: 0.7rem; }
+.acard { background: white; border-radius: 8px; border: 1px solid var(–border); overflow: hidden; transition: box-shadow 0.2s, border-color 0.2s; animation: fu 0.22s ease both; }
+@keyframes fu { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.acard:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.08); }
+.acard.hl { border-color: var(–red); box-shadow: 0 0 0 3px rgba(200,16,46,0.1); }
+
+.chead { display: flex; align-items: center; gap: 0.7rem; padding: 0.72rem 1rem; cursor: pointer; user-select: none; transition: background 0.12s; }
+.chead:hover { background: #fafafa; }
+.cnum { font-family: ‘Bebas Neue’, sans-serif; font-size: 1.05rem; color: var(–red); letter-spacing: 0.05em; white-space: nowrap; min-width: 64px; }
+.ctag { flex: 1; font-size: 0.67rem; color: var(–mid); font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cact { display: flex; gap: 0.38rem; align-items: center; flex-shrink: 0; }
+
+.btn-expl { display: flex; align-items: center; gap: 0.28rem; padding: 0.28rem 0.7rem; background: var(–red); border: none; border-radius: 4px; color: white; font-size: 0.68rem; font-weight: 600; font-family: ‘Inter’, sans-serif; cursor: pointer; letter-spacing: 0.04em; transition: background 0.15s, transform 0.1s; white-space: nowrap; }
+.btn-expl:hover { background: var(–red-dark); }
+.btn-expl:active { transform: scale(0.96); }
+.btn-expl:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btog { background: none; border: none; cursor: pointer; color: #bbb; padding: 0.18rem; display: flex; align-items: center; transition: color 0.15s, transform 0.2s; }
+.btog:hover { color: var(–red); }
+.btog.open { transform: rotate(180deg); color: var(–red); }
+
+.cbody { display: none; padding: 0.85rem 1rem 1rem; border-top: 1px solid var(–border); background: #fefefe; }
+.cbody.open { display: block; }
+.art-text { font-size: 0.86rem; line-height: 1.75; color: #333; }
+
+/* EXPLANATION */
+.exbox { display: none; margin-top: 0.8rem; padding: 0.8rem 1rem; background: var(–red-pale); border-radius: 6px; border-left: 3px solid var(–red); }
+.exbox.open { display: block; }
+.exlabel { font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(–red); margin-bottom: 0.45rem; display: flex; align-items: center; gap: 0.35rem; }
+.excontent { font-size: 0.83rem; line-height: 1.65; color: #3a1a1a; }
+.excontent strong { color: var(–red-dark); font-weight: 600; }
+.ldrow { display: flex; align-items: center; gap: 0.55rem; color: var(–red); font-size: 0.8rem; }
+.spin { width: 13px; height: 13px; border: 2px solid rgba(200,16,46,0.2); border-top-color: var(–red); border-radius: 50%; animation: spin 0.6s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+mark { background: rgba(200,16,46,0.13); color: inherit; border-radius: 2px; padding: 0 2px; }
+
+.empty { text-align: center; padding: 4rem 1.5rem; color: var(–light); }
+.empty p { font-size: 0.88rem; margin-top: 0.7rem; }
+
+/* BACK TOP */
+#btt { position: fixed; bottom: 1.5rem; right: 1.5rem; width: 40px; height: 40px; background: var(–black); color: white; border: none; border-radius: 50%; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: background 0.15s, transform 0.15s; z-index: 300; }
+#btt:hover { background: var(–red); transform: translateY(-2px); }
+#btt.show { display: flex; }
+
+/* FOOTER */
+footer { background: var(–black); color: #444; text-align: center; padding: 1.1rem 1rem; font-size: 0.7rem; letter-spacing: 0.05em; border-top: 3px solid var(–red); }
+footer strong { color: var(–red); font-weight: 700; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+.layout { grid-template-columns: 1fr; padding: 0 1rem 4rem; margin-top: 0.9rem; }
+.sidebar { position: static; }
+.chlist { max-height: 180px; }
+}
+@media (max-width: 600px) {
+.hinner { padding: 0 1rem; }
+.hmain { padding: 0.75rem 0 0.6rem; }
+.brand h1 { font-size: 1.25rem; }
+.art-badge { font-size: 0.9rem; }
+.srow { flex-wrap: nowrap; }
+#searchInput { font-size: 0.78rem; }
+.jwrap input { width: 52px; font-size: 0.78rem; }
+.finner { padding: 0 1rem; }
+.layout { padding: 0 0.75rem 4rem; }
+.cnum { font-size: 0.9rem; min-width: 56px; }
+.ctag { display: none; }
+.infobar { padding: 0.65rem 1rem 0; }
+}
+@media (max-width: 400px) {
+.brand-bar { display: none; }
+.srow { flex-wrap: wrap; }
+.swrap { min-width: 100%; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="topbar">
+  Código Civil del Paraguay &nbsp;<span>|</span>&nbsp; Ley N° 1183/85 &nbsp;<span>|</span>&nbsp; Arts. 277–416 &nbsp;<span>|</span>&nbsp; Creado por <strong style="font-weight:700;color:white;">Elias Jara</strong>
+</div>
+
+<header>
+  <div class="hinner">
+    <div class="hmain">
+      <div class="brand">
+        <div class="brand-bar"></div>
+        <div>
+          <h1>Código Civil PY</h1>
+          <div class="brand-sub">Actos Jurídicos &amp; Instrumentos</div>
+        </div>
+      </div>
+      <div class="art-badge">
+        <small>Artículos</small>
+        277 – 416
+      </div>
+    </div>
+    <div class="srow">
+      <div class="swrap">
+        <span class="sicon">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </span>
+        <input type="text" id="searchInput" placeholder="Buscar por palabra clave o número de artículo…" autocomplete="off">
+      </div>
+      <div class="jwrap">
+        <input type="number" id="jumpInput" placeholder="N°" min="277" max="416">
+        <button class="btn-go" onclick="jumpTo()">Ir →</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="fbar"><div class="finner" id="filters"></div></div>
+<div class="infobar" id="infobar"></div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sb-head">Secciones</div>
+    <div class="chlist" id="chlist"></div>
+  </aside>
+  <main><div class="alist" id="alist"></div></main>
+</div>
+
+<footer>
+  Código Civil del Paraguay — Ley N° 1183/85 &nbsp;·&nbsp; Arts. 277–416 &nbsp;·&nbsp;
+  Herramienta de estudio creada por <strong>Elias Jara</strong> &nbsp;·&nbsp;
+  No reemplaza asesoría legal profesional
+</footer>
+
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script>
+const RAW={"277":"Art.277.- Los actos voluntarios previstos en este Código son los que ejecutados con discernimiento, intención y libertad determinan una adquisición, modificación o extinción de derechos. Los que no reuniesen tales requisitos, no producirán por sí efecto alguno.","278":"Art.278.- Los actos se juzgarán ejecutados sin discernimiento: a) cuando sus agentes no hubiesen cumplido catorce años; b) cuando sus autores, por cualquier causa estuviesen privados de razón; y c) si procediesen de personas sujetas a interdicción o inhabilitación, salvo los casos previstos por este Código; Se tendrán como cumplidos sin intención, los viciados por error o dolo; y sin libertad, cuando mediase fuerza o temor.","279":"Art.279.- Ningún acto tendrá el carácter de voluntario, sin un hecho exterior por el cual la voluntad se manifieste.","280":"Art.280.- La voluntad podrá manifestarse, ya en un hecho material consumado, ya simplemente en su expresión positiva o tácita.","281":"Art.281.- Se tendrá como declaración positiva de la voluntad, aquélla que se manifieste verbalmente, o por escrito, o por signos inequívocos, con referencia a determinados objetos. No valdrá sin embargo, la que no revista las solemnidades prescriptas, cuando la ley exigiere un forma determinada para ciertos actos jurídicos.","282":"Art.282.- La manifestación tácita resultará de aquellos actos por los cuales se pueda conocer con certidumbre la existencia de la voluntad, siempre que no se exija una declaración positiva o no exista otra expresa en sentido contrario. El silencio será juzgado como asentimiento a un acto o a una pregunta, cuando exista deber legal de explicarse.","283":"Art.283.- Nadie puede obligar a otro a hacer alguna cosa, o restringir su libertad, sin estar legalmente autorizado para ello. Quien por la ley tenga facultad para dirigir las acciones de otro podrá impedirlo, aun por la fuerza, que se dañe a sí mismo.","284":"Art.284.- Cuando por hechos involuntarios se causare a otro algún daño en su persona o bienes, sólo se responderá con la indemnización correspondiente, si con el daño se enriqueció el autor del hecho, en la medida en que se hubiere enriquecido.","285":"Art.285.- La ignorancia de las leyes o el error de derecho no impedirá el efecto de los actos lícitos, ni excusará la responsabilidad por los ilícitos.","286":"Art.286.- No será válida la declaración de voluntad cuando el error recayere sobre algunos de los puntos siguientes: a) la naturaleza del acto; b) la persona con quien se formó la relación jurídica; c) la causa principal del acto; d) el objeto, en el caso de haberse indicado un bien diverso o de distinta especie; y e) cualquier otra circunstancia que, de buena fe, pudo considerar el agente como elemento necesario del acto celebrado.","287":"Art.287.- No invalida el acto el error sobre cualidades de la cosa no comprendidas en el inciso d) del artículo precedente, aunque hubiese sido motivo determinante del acto, a no ser que mediare garantía expresa, o que el agente se hubiese decidido por dolo.","288":"Art.288.- La parte que ha sufrido error no puede prevalerse de él contra las reglas de la buena fe. Estará obligado a ejecutar la prestación a que entendió comprometerse siempre que la otra parte se allanare al cumplimiento.","289":"Art.289.- El error no perjudica cuando ha habido razón para errar, pero no podrá ser alegado cuando procediere de negligencia imputable. En este caso, quien fundado en su propio error invocare la nulidad del acto para sustraerse a sus efectos, deberá indemnizar a la otra parte el daño que ha sufrido.","290":"Art.290.- Acción dolosa para conseguir la ejecución de un acto, es toda aserción falsa o disimulación de lo verdadero, cualquier astucia, artificio o maquinación que se emplee con ese fin. Las reglas se aplicarán igualmente a las omisiones dolosas.","291":"Art.291.- Para que el dolo cause la nulidad del acto se requiere que haya determinado la declaración de voluntad y que ocasione daño. El dolo incidental sólo obligará al resarcimiento del perjuicio.","292":"Art.292.- El dolo afectará la validez de los actos, sea que provenga de las partes o de un tercero.","293":"Art.293.- Habrá falta de libertad en el agente, cuando se empleare contra él fuerza irresistible. Se juzgará que hubo intimidación cuando por injustas amenazas alguien causare al agente temor fundado de sufrir cualquier mal inminente y grave en su persona, libertad, honra o bienes, o en la de su cónyuge, descendiente, ascendientes, o parientes colaterales.","294":"Art.294.- El ejercicio normal de los derechos no podrá determinar injustas amenazas. Sin embargo, cuando por este medio se hubiesen arrancado a la otra parte ventajas excesivas, la violencia moral podrá ser considerada suficiente para anular el acto.","295":"Art.295.- La fuerza o la intimidación vicia el acto, aunque se la haya empleado por un tercero. Cuando una de las partes hubiere tenido conocimiento de ello, ésta responderá solidariamente con el autor por los daños.","296":"Art.296.- Son actos jurídicos los actos voluntarios lícitos, que tengan por fin inmediato crear, modificar, transferir, conservar o extinguir derechos. Las omisiones que revistieren los mismos caracteres están sujetas a las reglas del presente título.","297":"Art.297.- Sin perjuicio de lo dispuesto en este Código sobre la capacidad o incapacidad de las personas, y sobre la forma de los actos, éstos serán exclusivamente regidos, sea cual fuere el lugar de su celebración, en cuanto a su formación, prueba, validez y efectos, por las leyes de la República, cuando hubieren de ser ejecutados en su territorio.","298":"Art.298.- La incapacidad de una de las partes no puede ser invocada en provecho propio por la parte capaz. Si de una parte se obligan simultáneamente una persona capaz y otra incapaz, sólo ésta podrá demandar la anulación parcial del acto.","299":"Art.299.- No podrá ser objeto de los actos jurídicos: a) aquello que no esté dentro del comercio; b) lo comprendido en una prohibición de la ley; y c) los hechos imposibles, ilícitos, contrarios a la moral y a las buenas costumbres, o que perjudiquen los derechos de terceros.","300":"Art.300.- La calificación jurídica errónea que del acto hagan las partes no perjudica su eficacia, que se juzgará según el contenido real del mismo. Cuando hubiese en un instrumento palabras que no armonicen con la intención reflejada en el acto, prevalecerá ésta.","301":"Art.301.- Los actos jurídicos producen el efecto declarado por las partes, el virtualmente comprendido en ellos y el que les asigne la ley.","302":"Art.302.- En la celebración de los actos jurídicos deberán observarse las solemnidades prescriptas por la ley. A falta de regla especial, las partes podrán emplear las formas que estimen convenientes.","303":"Art.303.- Cuando una determinada forma instrumental fuere exclusivamente prescripta por la ley, no se la podrá suplir por otra, aunque las partes se hubiesen comprometido por escrito a su otorgamiento en un tiempo determinado. Esta cláusula y el acto mismo serán nulos.","304":"Art.304.- La expresión por escrito puede tener lugar por instrumento público o instrumento privado, salvo los casos en que la forma de instrumento público fuere exclusivamente dispuesta.","305":"Art.305.- La simulación no es reprobada por la ley cuando a nadie perjudica ni tiene un fin ilícito.","306":"Art.306.- Se podrá anular el acto jurídico, cuando por la simulación se perjudica a un tercero o se persigue un fin ilícito. En tal caso, los autores de aquella sólo podrán ejercer entre sí la acción para obtener la nulidad.","307":"Art.307.- Si hubiere un contra documento firmado por alguna de las partes, para dejar el acto simulado, cuando éste hubiere sido ilícito; o cuando fuere lícito, explicando o restringiendo el acto precedente, los jueces pueden conocer sobre él y sobre la simulación.","308":"Art.308.- Los terceros perjudicados por un acto simulado tienen acción para demandar su anulación, pero los efectos de la sentencia no afectarán la validez de los actos de administración o enajenación celebrados a título oneroso con otras personas de buena fe.","309":"Art.309.- La simulación no podrá ser opuesta por los contratantes a los acreedores del titular aparente que de buena fe hubieren realizados actos de ejecución sobre bienes que fueron objeto del contrato simulado.","310":"Art.310.- La prueba de la simulación será admisible sin limitación si la demanda fuere promovida por terceros y cuando fuere destinada a invocar la ilicitud del acto simulado, aunque fuere promovida por las partes.","311":"Art.311.- Los actos de disposición a título gratuito practicados por el deudor insolvente, o reducido a la insolvencia por causa de dichos actos, pueden ser revocados a instancia de los acreedores.","312":"Art.312.- Serán igualmente revocables los actos onerosos practicados por el deudor insolvente, cuando la insolvencia fuere notoria, o hubiese fundado motivo para ser conocida del otro contratante, y el crédito en virtud del cual se intenta la acción sea anterior al acto fraudulento.","313":"Art.313.- Si el deudor renunciare derechos, aunque no fueren irrevocablemente adquiridos, con lo que pudo mejorar el estado de su fortuna o impedir la disminución de ella, podrá el acreedor obtener la revocación de dicha renuncia.","314":"Art.314.- También procederá la revocación cuando el deudor constituyere derechos reales de garantía sobre sus bienes en perjuicio de sus acreedores.","315":"Art.315.- La revocación será pronunciada exclusivamente en interés del acreedor que la pidió, y hasta el importe de su crédito. Cesará la acción del acreedor si el tercero efectuare el pago o constituyese garantía.","316":"Art.316.- Obtenida la revocación, el acreedor puede promover contra el tercero las acciones ejecutivas o conservatorias respecto de los bienes que constituyen el objeto del acto revocado. El cómplice en el fraude debe devolverlos con todos sus frutos como poseedor de mala fe.","317":"Art.317.- El que hubiere adquirido de mala fe las cosas enajenadas en fraude de los acreedores, deberá indemnizar a éstos de los daños y perjuicios, cuando la cosa hubiere pasado a un subadquirente de buena fe, o cuando se hubiere perdido.","318":"Art.318.- En los actos jurídicos las partes podrán subordinar a un acontecimiento futuro e incierto la existencia o la resolución de sus efectos.","319":"Art.319.- La condición de un hecho imposible, contrario a la moral o a las buenas costumbres, o prohibido por las leyes, deja sin efecto el acto jurídico. Quedan especialmente prohibidas las siguientes condiciones: a) habitar siempre un lugar determinado; b) mudar o no mudar de religión; c) casarse con determinada persona con aprobación de un tercero; y d) vivir célibe perpetua o temporalmente.","320":"Art.320.- La condición debe cumplirse de la manera como se la estipuló. El cumplimiento de la condición es indivisible aunque la prestación consista en hechos divisibles.","321":"Art.321.- La condición se juzgará cumplida, cuando las partes a quienes su cumplimiento aprovecha, voluntariamente la renuncien; o cuando, dependiendo del acto voluntario de un tercero, éste se negare al acto, o rehusare su asentimiento.","322":"Art.322.- Si la relación de derecho fuere subordinada a una condición resolutoria, sus efectos cesan por el cumplimiento de ella. A partir de este momento se restablece el estado anterior a la celebración del acto. Debe restituirse lo que hubiere recibido.","323":"Art.323.- Pendiente la condición suspensiva no puede exigirse el cumplimiento de la obligación a ella subordinada. Si por error el deudor hubiere entregado bienes en ejecución de la obligación condicionada, podrá repetirlos.","324":"Art.324.- El que tenga un derecho subordinado a una condición suspensiva podrá exigir, en caso de realizarse la condición, daños y perjuicios a la otra parte, si ésta, durante el tiempo intermedio de la suspensión, ha destruido o limitado el derecho dependiente de la condición.","325":"Art.325.- Si alguien ha dispuesto de un objeto bajo condición suspensiva, todo acto posterior efectuado sobre dicho objeto, pendiente la condición, será ineficaz si la condición se cumpliere, en la medida en que perjudicase el efecto dependiente de ella.","326":"Art.326.- Cumplida la condición, quedan subsistentes los actos de administración realizados por el propietario durante el tiempo intermedio.","327":"Art.327.- Pendiente la condición, los interesados podrán usar de todas las medidas conservatorias de los derechos que les corresponderían en el caso de que ella se cumpliera.","328":"Art.328.- El cargo impuesto sólo impedirá el efecto del acto jurídico cuando importase una condición suspensiva. En caso de duda se entenderá que tal condición no ha existido.","329":"Art.329.- Si hubiere condición resolutoria por falta de cumplimiento del cargo impuesto, será necesaria la sentencia del juez para que el beneficiario pierda el derecho adquirido.","330":"Art.330.- Si no hubiere condición resolutoria, la falta de cumplimiento del cargo no hará incurrir en la pérdida de los bienes adquiridos y quedará a salvo a los interesados el derecho de constreñir judicialmente al gravado a cumplir el cargo impuesto.","331":"Art.331.- A falta de plazo determinado, el cargo deberá cumplirse dentro del señalado por el juez.","332":"Art.332.- La obligación de cumplir el cargo impuesto para la adquisición de un derecho pasa a los herederos del que fue gravado con él, a no ser que sólo pudiese ser cumplido por el deudor, como inherente a su persona.","333":"Art.333.- Si el hecho no fuere absolutamente imposible, pero llegare a serlo después sin culpa del adquirente, la adquisición subsistirá y los bienes quedarán adquiridos sin cargo alguno.","334":"Art.334.- Podrá establecerse que el efecto jurídico de un acto no sea exigible antes de vencer el plazo, o que se extinguirá al término de éste. Dicho término podrá referirse a una fecha dada o a un acontecimiento futuro que se producirá necesariamente.","335":"Art.335.- El plazo en los actos jurídicos se presume establecido a favor de todos los interesados, a no ser que resultare lo contrario del objeto de aquellos o de otras circunstancias. El pago no podrá hacerse antes del término sino de común acuerdo.","336":"Art.336.- El deudor sometido a concurso no puede reclamar el plazo para el cumplimiento de la obligación. Aunque el término se hubiere establecido en favor del deudor, puede el acreedor exigir inmediatamente la prestación si el deudor hubiese disminuido, por acto propio, las garantías prometidas.","337":"Art.337.- Si el plazo se fijare por meses o por años, se contará el mes de treinta días, y el año de trescientos sesenta y cinco días, por el calendario gregoriano.","338":"Art.338.- Los plazos de días se contarán desde el día siguiente al de la celebración del acto. Si el plazo está señalado por días a contar desde uno determinado, quedará éste excluido del cómputo. El plazo incluye el día del vencimiento.","339":"Art.339.- El plazo establecido por meses o por años concluirá al transcurrir el día del último mes que tenga el mismo número que aquél en que comenzó a correr el plazo.","340":"Art.340.- Cuando el plazo comenzare a correr desde el último día de un mes de más días que aquél en que terminare el plazo, éste vencerá el último día de este mes.","341":"Art.341.- Todos los plazos serán continuos y completos, debiendo siempre terminar en la media noche del último día. Se computarán los días domingos y feriados, salvo disposición expresa en contrario.","342":"Art.342.- Las disposiciones de los artículos anteriores serán aplicables a todos los plazos señalados por las leyes, por los jueces, o por las partes en los actos jurídicos.","343":"Art.343.- Podrán celebrarse por medio de representantes los actos jurídicos entre vivos. Los que versaren sobre derechos de familia, sólo admiten representación en los casos expresamente autorizados por este Código.","344":"Art.344.- Los actos del representado se reputarán como celebrados por el representante, siempre que los ejecutare dentro los límites de sus poderes. Cuando se excediere de ellos, pero los terceros fueren de buena fe, se estimará que obró dentro de sus facultades.","345":"Art.345.- Los terceros con quienes los representantes concertaren un negocio tienen derecho a exigir que se les presente el instrumento que acredite la representación y las cartas, órdenes o instrucciones que se refieren a ella.","346":"Art.346.- Si el representante careciere de poderes, o los hubiere excedido y el representado no ratificare el acto obrado en su nombre, éste no obligará al representado.","347":"Art.347.- La ratificación equivale a la representación. Tiene efecto retroactivo al día del acto, pero quedarían a salvo los derechos de los terceros.","348":"Art.348.- El representante deberá: a) atenerse a sus poderes; b) abstenerse de formalizar consigo mismo un acto jurídico sin autorización; c) cuando el encargo fuere de colocar fondos a réditos, abstenerse de aplicarlos a sus negocios propios; y d) no usar de sus poderes en beneficio propio.","349":"Art.349.- El representado deberá atenerse a la fecha de los instrumentos que su representante hubiere suscrito, salvo que pruebe que aquellos fueron antedatados.","350":"Art.350.- Cuando la eficacia de un contrato, o de un acto jurídico unilateral que interese a otra persona, dependiese de la voluntad de un tercero, el asentimiento o la negativa de éste podrá hacerse a cualquiera de los interesados.","351":"Art.351.- El asentimiento será revocable hasta el momento de la ejecución del acto, a menos que resulte lo contrario de la relación jurídica en virtud de la cual se otorgó dicho asentimiento.","352":"Art.352.- Los efectos del asentimiento prestado posteriormente se retrotraerán, salvo convención en contrario, al tiempo de la celebración del acto jurídico. La facultad de aprobar se transmite a los herederos.","353":"Art.353.- Queda revalidado el acto de disposición realizado por quien no pudiere hacerlo legalmente: a) cuando lo hubiere autorizado el titular; b) cuando requiriendo la celebración del acto una autorización previa, ésta fuere otorgada posteriormente; c) si luego adquiere el objeto; y d) siempre que heredare al dueño.","355":"Art.355.- Las únicas nulidades que los jueces pueden declarar son las que expresa o implícitamente se establece en este Código.","356":"Art.356.- Los actos nulos no producen efectos, aunque su nulidad no haya sido juzgada, salvo que la causa de la nulidad no aparezca en el acto, en cuyo caso deberá comprobarse judicialmente. Los actos anulables se reputarán válidos mientras no sean anulados.","357":"Art.357.- Es nulo el acto jurídico: a) cuando lo hubiere realizado un incapaz por falta de discernimiento; b) si el acto o su objeto fueren ilícitos o imposibles; c) en caso de no revestir la forma prescripta por la ley; d) si dependiendo su validez de la forma instrumental, fuese nulo el instrumento respectivo; y e) cuando el agente procediese con simulación o fraude presumidos por la ley.","358":"Art.358.- Es anulable el acto jurídico: a) cuando el agente obrare con incapacidad accidental; b) cuando, ejecutado por un incapaz de hecho, éste tuviese discernimiento; c) si estuviese viciado de error, dolo, violencia o simulación; d) cuando dependiendo su validez de la forma instrumental, fuese anulable el instrumento respectivo; y e) si fuese practicado contra la prohibición de disponer dictada por juez competente.","359":"Art.359.- Cuando el acto es nulo, su nulidad debe ser declarada de oficio por el juez, si aparece manifiesta en el acto o ha sido comprobada en juicio. El Ministerio Público y todos los interesados tendrán derecho para alegarla.","360":"Art.360.- Cuando un incapaz hubiere procedido con dolo para inducir a la otra parte a consentir, ni él, ni sus representantes ni sucesores tendrán derecho a anular el acto. Si fuere menor, la simple afirmación de su mayor edad no le inhabilitará para obtener la declaración de nulidad.","361":"Art.361.- La nulidad pronunciada por los jueces vuelven las cosas al mismo o igual estado en que se hallaban antes del acto anulado, e impone a las partes la obligación de restituirse mutuamente todo lo que hubieren recibido en virtud de él.","362":"Art.362.- Si el acto fuere nulo o anulable por incapacidad de hecho, la parte capaz no podrá exigir la restitución de lo entregado, ni el reembolso de los gastos, salvo si probare que aún existe en poder del incapaz lo que le hubiere dado.","363":"Art.363.- Todos los derechos reales o personales transmitidos a terceros sobre un inmueble por una persona que ha llegado a ser propietaria en virtud del acto anulado, quedan sin ningún valor y pueden ser reclamados directamente del poseedor actual.","364":"Art.364.- Los actos nulos y los anulables que fueron anulados, aunque no produzcan los efectos de los actos jurídicos, pueden producir los efectos de los actos ilícitos, cuyas consecuencias deben ser reparadas.","365":"Art.365.- La nulidad de un acto jurídico puede ser total o parcial. En los testamentos la ineficacia de una disposición particular no afectará la validez de las otras, con tal que sean separables.","366":"Art.366.- Se tendrá por confirmado un acto anulable cuando por otro válido, quien tuviere el derecho para pedir la anulación, hiciere desaparecer los vicios.","367":"Art.367.- La confirmación puede ser expresa o tácita. El instrumento de confirmación expresa debe contener, bajo pena de nulidad, la substancia del acto que se quiere confirmar, el vicio de que adolecía y la manifestación de la intención de repararlo.","368":"Art.368.- La forma del instrumento de confirmación debe ser la misma establecida para el acto que se confirma.","369":"Art.369.- La confirmación tácita es la que resulta de la ejecución voluntaria, total o parcial, del acto anulable.","370":"Art.370.- La confirmación, sea expresa o tácita, no exige el concurso de la parte a cuyo favor se hace.","371":"Art.371.- La confirmación tiene efecto retroactivo al día en que tuvo lugar el acto entre vivos, o al día de fallecimiento del testador en los actos de última voluntad.","372":"Art.372.- Los derechos deben ser ejercidos de buena fe. El ejercicio abusivo de los derechos no está amparado por la ley y compromete la responsabilidad del agente por el perjuicio que cause.","373":"Art.373.- Un hecho impuesto por la legítima defensa no es contrario al derecho. Esta defensa tiene lugar cuando es exigida para apartar de sí o de otro un ataque actual ejercido en violación del derecho.","374":"Art.374.- El que deteriore o destruya la cosa ajena para apartar de sí o de otro el daño con que esa amenace, no cobrará contra el derecho cuando el deterioro o la destrucción sea exigido para alejar el peligro.","375":"Art.375.- Son instrumentos públicos: a) las escrituras públicas; b) cualquier otro instrumento que autoricen los escribanos o funcionarios públicos; c) las diligencias y planos de mensuras aprobados por la autoridad judicial; d) las actuaciones judiciales; e) las letras aceptadas por el Gobierno; f) las inscripciones de la deuda pública; g) los asientos de los registros públicos; y h) las copias o fotocopias autorizadas de los instrumentos públicos.","376":"Art.376.- La validez del instrumento público requiere: a) que el autorizante obre en los límites de sus atribuciones; b) que se extienda dentro de la jurisdicción territorial asignada al oficial público; y c) que contenga la firma del funcionario autorizante, así como las de todos los que aparezcan como partes o testigos.","377":"Art.377.- Son instrumentos nulos: a) los que el oficial público autorizó después de serle comunicada su suspensión o destitución; b) aquellos en que el autorizante o sus parientes dentro del cuarto grado tuvieren interés personal; y c) los que no llenaren las condiciones prescriptas para la validez del instrumento público.","378":"Art.378.- Serán anulables: a) si el oficial público, las partes o los testigos los hubieran autorizado o suscripto por error, dolo o violencia; y b) siempre que tuvieren enmiendas, borraduras o alteraciones en puntos capitales, no salvadas antes de las firmas.","379":"Art.379.- El instrumento autorizado por oficial incompetente, o que no tuviere las formas legales, valdrá, sin embargo, como documento privado, si lo hubieren suscripto las partes.","380":"Art.380.- No pueden ser testigos en los instrumentos públicos: a) los menores de edad; b) los sometidos a interdicción o inhabilitación; c) los ciegos; d) los que no sepan o puedan firmar; e) los dependientes del oficial público autorizante; f) el cónyuge y los parientes del oficial público y de las partes; y g) los que por sentencia se hallaren inhabilitados para ser testigos.","381":"Art.381.- El error sobre la capacidad de los testigos incapaces que hubieren intervenido en los instrumentos públicos, pero que generalmente eran tenidos como capaces, salva la nulidad del acto.","382":"Art.382.- Los testigos de un instrumento público y el oficial que lo autorizó no podrán contradecir, variar ni alterar su contenido, a no ser que lo hubieren suscripto por dolo o violencia.","383":"Art.383.- El instrumento público hará plena fe mientras no fuere argüido de falso por acción criminal o civil, sobre la realidad de los hechos que el autorizante enunciare como cumplidos por él o pasados en su presencia.","384":"Art.384.- Los jueces pueden declarar de oficio la falsedad de un instrumento público presentado en juicio, si de su contexto, forma y conjunto resultare manifiesto hallarse viciado de falsedad o alteraciones en partes esenciales.","385":"Art.385.- Los instrumentos públicos hacen plena fe entre las partes y contra terceros: a) en cuanto a la circunstancia de haberse ejecutado el acto; b) respecto de las convenciones, disposiciones, pagos y reconocimientos contenidas en ellos; y c) acerca de las enunciaciones de hechos directamente relacionados con el acto jurídico.","386":"Art.386.- El contenido de un instrumento público puede ser modificado o dejado sin efecto por un contradocumento público o privado que los interesados otorguen.","387":"Art.387.- Cuando se hubieran destruido o desaparecido los instrumentos públicos originales, y existieren copias autorizadas de ellos, el juez podrá ordenar que la copia sea archivada en el protocolo de un escribano de registro como instrumento original.","388":"Art.388.- Si en el caso del artículo precedente no existiere copia que pudiere utilizarse, el acto jurídico podrá ser probado por las menciones que existan en otros instrumentos públicos, o por las constancias de los registros públicos.","389":"Art.389.- Las escrituras y demás actos públicos, sólo podrán ser autorizados por los notarios y escribanos de registro. En los lugares donde no haya escribanos públicos, serán autorizados por los jueces de Paz.","390":"Art.390.- Las escrituras deben redactarse en español. Si los comparecientes no supieren hablarlo, la escritura se hará de entera conformidad con una minuta en el idioma en que los comparecientes puedan expresarse, vertida al español por traductor público matriculado.","391":"Art.391.- Si cualquiera de los otorgantes fuere sordomudo o mudo que sepa darse a entender por escrito en forma inequívoca, la escritura se hará de acuerdo con una minuta, cuyas firmas deberán reconocer ante el escribano.","392":"Art.392.- Si el escribano no conociere a las partes, deberán éstas acreditar su identidad con un documento legal idóneo, o en su defecto, con el testimonio de dos personas conocidas de aquél.","393":"Art.393.- Si las partes actuaren por medio de representantes, el notario procederá según reglas específicas: transcribirá los poderes generales en su protocolo, y dará fe de haber confrontado los instrumentos con la matriz o el original.","394":"Art.394.- La escritura pública debe expresar: a) los nombres y apellidos de las partes, su estado civil, si son mayores de edad, su nacionalidad y domicilio; b) el lugar y fecha en que firmaren; y c) la naturaleza y objeto del acto.","395":"Art.395.- Si las partes decidieren, después de firmada por ellas la escritura, pero antes de lo que hubiere hecho el escribano, corregirla o hacerle agregados, éstos sólo valdrán si fueren extendidos a continuación por aquél y suscriptos por todos los comparecientes.","396":"Art.396.- Son nulas las escrituras públicas si faltaren en ellas: a) la fecha y el lugar; b) los nombres de las partes; c) el objeto y naturaleza del acto; d) la mención de poderes y documentos habilitantes; e) la atestación del notario de conocer a las partes; f) la constancia de haber recibido personalmente la declaración; g) la firma de las partes; y h) las firmas del escribano y de los testigos.","397":"Art.397.- El escribano debe dar copia autorizada de la escritura a las partes que la solicitaren. Si éstas pidieren otros testimonios, los entregará haciendo constar en ellos y en el protocolo esa circunstancia.","398":"Art.398.- La protocolización de documentos exigida por la ley, sólo se hará en virtud de orden judicial. El notario deberá agregar el instrumento a su protocolo, mediante un acta que contenga los datos necesarios para identificarlo.","399":"Art.399.- Los instrumentos privados podrán ser otorgados en cualquier día, y ser redactados en la forma e idioma que las partes juzguen convenientes, pero la firma de ellas será indispensable para su validez, sin que sea permitido substituirla por signos, ni por las iniciales de los nombres o apellidos.","400":"Art.400.- Los instrumentos privados que contengan convenciones bilaterales, deben redactarse en tantos ejemplares como partes haya con interés distinto, con expresión en cada uno de ellos el número de ejemplares suscritos.","401":"Art.401.- La omisión de los requisitos mencionados en los artículos anteriores no perjudica la validez del acto: a) cuando uno de sus otorgantes haya cumplido todas las obligaciones asumidas; b) cuando por otras pruebas se demuestre que el acto fue concluido definitivamente; c) si las partes depositaron el instrumento en poder de un escribano; o d) cuando los otorgantes cumplieren con posterioridad las obligaciones contenidas.","402":"Art.402.- Los instrumentos privados pueden ser firmados en blanco antes de ser redactados, y en tal caso, harán fe, una vez llenados y reconocidas las firmas. El signatario podrá oponerse al contenido del documento, probando que no tuvo la intención de declarar lo que en él se consigna.","403":"Art.403.- Si el documento firmado en blanco hubiere sido sustraído o fraudulentamente obtenido del signatario y fuere llenado por un tercero en perjuicio del firmante, podrá admitirse todos los medios de prueba.","404":"Art.404.- Toda persona contra quien se presentare en juicio un instrumento privado cuya firma se le atribuye, deberá declarar si la firma es o no suya. Si la firma no fuere conocida, se ordenará el cotejo de la misma, sin perjuicio de los demás medios de prueba.","405":"Art.405.- Ninguna persona que hubiere suscrito con iniciales o signos un instrumento privado podrá ser obligada a reconocerlos como su firma, podrá, empero, reconocerlos voluntariamente, y en tal caso, las iniciales o signos valdrán como su verdadera firma.","406":"Art.406.- No serán admitidos a reconocimiento los instrumentos privados cuyos firmantes fueren incapaces al tiempo de ser citados judicialmente para hacerlo, aun cuando al tiempo de suscribirlos hubieren sido capaces.","407":"Art.407.- El instrumento privado judicialmente reconocido por la parte a quien se opone, o declarado debidamente reconocido, tiene el mismo valor que el instrumento público entre los que lo han suscripto y sus sucesores.","408":"Art.408.- Los instrumentos privados, aunque están reconocidos, no prueban contra los terceros o los sucesores a título singular, la verdad de la fecha expresada en ellos. Su fecha cierta será: la de su exhibición en juicio, autenticación por un escribano, transcripción en registro público, o del fallecimiento del firmante.","409":"Art.409.- Las notas escritas o firmadas por el acreedor en el margen, dorso o a continuación de un documento privado en poder del deudor, probarán para liberar a éste, mas no para establecer una obligación adicional.","410":"Art.410.- La carta que por su contenido sea confidencial a criterio del juez no podrá ser utilizada por un tercero en juicio, ni con el asentimiento del destinatario, y será rechazada de oficio.","411":"Art.411.- Las cartas dirigidas a una persona pueden ser presentadas por ella en juicio cuando constituyen un medio de demostración, en litigio en que esté interesada, sea cual fuere su carácter.","412":"Art.412.- El valor probatorio de las cartas no depende de la observancia de forma alguna. Pueden ser admitidas, según las circunstancias, aunque no estén firmadas, si son manuscritas, o si sólo están suscriptas con signos o iniciales.","413":"Art.413.- Los libros o registros domésticos de personas no comerciantes no constituyen prueba en su favor. Prueban contra ellas cuando enuncian expresamente un pago recibido, o cuando contienen la mención expresa de que la anotación se ha hecho para suplir la falta de título.","414":"Art.414.- Los telegramas sólo tendrán el valor probatorio de los instrumentos privados, cuando el original existente en la oficina en que se despachó contuviere la firma del remitente.","415":"Art.415.- Las fotocopias de instrumentos privados, obrantes en expedientes administrativos o judiciales, que llevaren la certificación del funcionario administrativo competente, serán consideradas como fiel y exacta reproducción de los originales.","416":"Art.416.- El reconocimiento o renovación de un acto jurídico hace plena prueba de las declaraciones contenidas en el acto original, si no se demuestra por la exhibición de este último que ha habido error en el reconocimiento o en la renovación."};
+
+const SECS=[
+  {id:'all',label:'Todos',range:[277,416]},
+  {id:'v',label:'Actos Voluntarios',range:[277,295]},
+  {id:'j',label:'Actos Jurídicos',range:[296,317]},
+  {id:'m',label:'Modalidades',range:[318,353]},
+  {id:'n',label:'Nulidad',range:[354,371]},
+  {id:'d',label:'Ejercicio',range:[372,374]},
+  {id:'p',label:'Inst. Públicos',range:[375,398]},
+  {id:'r',label:'Inst. Privados',range:[399,416]},
+];
+const SUBS=[
+  {l:'Actos Voluntarios',f:277,t:284},{l:'Del Error',f:285,t:289},{l:'Del Dolo',f:290,t:292},
+  {l:'Fuerza e Intimidación',f:293,t:295},{l:'Actos Jurídicos',f:296,t:304},{l:'Simulación',f:305,t:310},
+  {l:'Fraude de Acreedores',f:311,t:317},{l:'La Condición',f:318,t:327},{l:'El Cargo',f:328,t:333},
+  {l:'El Plazo',f:334,t:342},{l:'Representación',f:343,t:353},{l:'Nulidad de Actos',f:355,t:365},
+  {l:'Confirmación',f:366,t:371},{l:'Ejercicio de Derechos',f:372,t:374},{l:'Inst. Públicos',f:375,t:388},
+  {l:'Escrituras Públicas',f:389,t:398},{l:'Inst. Privados',f:399,t:409},{l:'Cartas y Otros Medios',f:410,t:416},
+];
+function secOf(n){return SECS.slice(1).find(s=>n>=s.range[0]&&n<=s.range[1])||SECS[1];}
+
+let all=Object.entries(RAW).map(([n,t])=>({num:+n,text:t}));
+let shown=[...all],q='';
+const cache={};
+
+function buildFilters(){
+  const c=document.getElementById('filters');
+  SECS.forEach(s=>{
+    const b=document.createElement('button');
+    b.className='fb'+(s.id==='all'?' active':'');
+    b.textContent=s.label; b.dataset.id=s.id;
+    b.onclick=()=>{
+      document.querySelectorAll('.fb').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+      document.querySelectorAll('.chitem').forEach(x=>x.classList.remove('active'));
+      q=''; document.getElementById('searchInput').value='';
+      shown=s.id==='all'?[...all]:all.filter(a=>a.num>=s.range[0]&&a.num<=s.range[1]);
+      render(); window.scrollTo({top:0,behavior:'smooth'});
+    }; c.appendChild(b);
+  });
+}
+
+function buildSidebar(){
+  const c=document.getElementById('chlist');
+  SUBS.forEach(s=>{
+    const el=document.createElement('div'); el.className='chitem';
+    el.innerHTML=`<span class="chrange">${s.f}–${s.t}</span>${s.l}`;
+    el.onclick=()=>{
+      document.querySelectorAll('.chitem').forEach(x=>x.classList.remove('active')); el.classList.add('active');
+      document.querySelectorAll('.fb').forEach(x=>x.classList.remove('active'));
+      document.querySelector('.fb').classList.add('active');
+      q=''; document.getElementById('searchInput').value='';
+      shown=all.filter(a=>a.num>=s.f&&a.num<=s.t); render(); window.scrollTo({top:0,behavior:'smooth'});
+    }; c.appendChild(el);
+  });
+}
+
+function hl(t,q){if(!q)return t;const e=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');return t.replace(new RegExp(`(${e})`,'gi'),'<mark>$1</mark>');}
+
+function render(){
+  const c=document.getElementById('alist'),info=document.getElementById('infobar');
+  if(!shown.length){
+    c.innerHTML=`<div class="empty"><svg width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><p>Sin resultados para "<strong>${q}</strong>"</p></div>`;
+    info.textContent=''; return;
+  }
+  info.textContent=`${shown.length} artículo${shown.length!==1?'s':''}${q?` · "${q}"`:''}`;
+  c.innerHTML='';
+  shown.forEach((art,i)=>{
+    const sec=secOf(art.num),card=document.createElement('div');
+    card.className='acard'; card.id=`a${art.num}`; card.style.animationDelay=`${Math.min(i*13,160)}ms`;
+    card.innerHTML=`
+      <div class="chead" onclick="tog(${art.num})">
+        <span class="cnum">Art. ${art.num}</span>
+        <span class="ctag">${sec.label}</span>
+        <div class="cact" onclick="event.stopPropagation()">
+          <button class="btn-expl" id="eb${art.num}" onclick="xplain(${art.num})">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> IA
+          </button>
+          <button class="btog" id="tb${art.num}">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="cbody" id="cb${art.num}">
+        <p class="art-text">${hl(art.text,q)}</p>
+        <div class="exbox" id="ex${art.num}">
+          <div class="exlabel">
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            Explicación sencilla — IA
+          </div>
+          <div class="excontent" id="ec${art.num}"></div>
+        </div>
+      </div>`;
+    c.appendChild(card);
+  });
+}
+
+function tog(n){
+  document.getElementById(`cb${n}`).classList.toggle('open');
+  document.getElementById(`tb${n}`).classList.toggle('open');
+}
+
+async function xplain(n){
+  const btn=document.getElementById(`eb${n}`),body=document.getElementById(`cb${n}`),
+        tb=document.getElementById(`tb${n}`),box=document.getElementById(`ex${n}`),
+        cont=document.getElementById(`ec${n}`);
+  body.classList.add('open'); tb.classList.add('open');
+  if(cache[n]){box.classList.add('open');cont.innerHTML=cache[n];return;}
+  btn.disabled=true;
+  btn.innerHTML=`<div class="spin" style="width:10px;height:10px;border-width:2px"></div>`;
+  box.classList.add('open');
+  cont.innerHTML=`<div class="ldrow"><div class="spin"></div>Generando…</div>`;
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,
+        system:`Sos un asistente jurídico que explica artículos del Código Civil del Paraguay de forma clara y sencilla para estudiantes de derecho en Paraguay.
+Reglas:
+- Explicá en 2-4 oraciones usando lenguaje cotidiano
+- Incluí un ejemplo práctico breve y concreto cuando sea útil
+- Usá <strong> para conceptos jurídicos clave
+- Solo HTML simple (strong, em, br). Sin markdown ni encabezados
+- Empezá directo con la explicación, sin decir "Este artículo..."`,
+        messages:[{role:"user",content:`Explicá este artículo del Código Civil de Paraguay en términos simples para un estudiante de derecho:\n\n${RAW[String(n)]}`}]})
+    });
+    const d=await res.json(),txt=d.content?.map(b=>b.text||'').join('')||'No se pudo generar.';
+    cache[n]=txt; cont.innerHTML=txt;
+  }catch(e){cont.innerHTML='<em>Error de conexión. Intentá de nuevo.</em>';}
+  btn.disabled=false;
+  btn.innerHTML=`<svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> IA`;
+}
+
+let st;
+document.getElementById('searchInput').addEventListener('input',function(){
+  clearTimeout(st); st=setTimeout(()=>{
+    q=this.value.trim().toLowerCase();
+    document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+    document.querySelector('.fb').classList.add('active');
+    document.querySelectorAll('.chitem').forEach(b=>b.classList.remove('active'));
+    shown=q?all.filter(a=>a.text.toLowerCase().includes(q)||String(a.num).includes(q)):[...all];
+    render();
+  },220);
+});
+
+function jumpTo(){
+  const n=parseInt(document.getElementById('jumpInput').value);
+  if(!n||n<277||n>416)return;
+  if(!shown.find(a=>a.num===n)){
+    shown=[...all];q='';document.getElementById('searchInput').value='';
+    document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+    document.querySelector('.fb').classList.add('active');render();
+  }
+  setTimeout(()=>{
+    const el=document.getElementById(`a${n}`); if(!el)return;
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+    el.classList.add('hl');
+    document.getElementById(`cb${n}`).classList.add('open');
+    document.getElementById(`tb${n}`).classList.add('open');
+    setTimeout(()=>el.classList.remove('hl'),2500);
+  },120);
+}
+document.getElementById('jumpInput').addEventListener('keydown',e=>{if(e.key==='Enter')jumpTo();});
+window.addEventListener('scroll',()=>{document.getElementById('btt').classList.toggle('show',window.scrollY>400);});
+
+buildFilters(); buildSidebar(); render();
+</script>
+
+</body>
+</html>
