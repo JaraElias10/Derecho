@@ -1,519 +1,388 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Derecho — Elias Jara</title>
 <style>
-:root {
-  --red: #c8102e;
-  --red-dark: #9e0c24;
-  --red-pale: #fff0f2;
-  --black: #0a0a0a;
-  --dark: #141414;
-  --card: #161616;
-  --border-dark: #1f1f1f;
-  --mid: #666;
-  --light: #aaa;
-  --border: #e8e8e8;
-  --bg: #f5f5f5;
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: #111111;
+  min-height: 100vh;
 }
 
-- { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; overflow: hidden; font-family: var(–font); }
-
-/* ─── APP SHELL ─── */
-#app {
-width: 100%; height: 100%;
-position: relative;
-overflow: hidden;
-background: var(–black);
-}
-
-/* ─── SCREENS ─── */
+/* SCREENS — ocultas por defecto, visibles con JS */
 .screen {
-position: absolute;
-inset: 0;
-display: flex;
-flex-direction: column;
-transform: translateX(100%);
-transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
-will-change: transform;
-overflow: hidden;
+  display: none;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+.screen.show { display: flex; }
+
+/* ── PANTALLA 1: INICIO ── */
+#s1 {
+  background: #111111;
 }
 
-.screen.active   { transform: translateX(0); }
-.screen.exiting  { transform: translateX(-30%); }
-.screen.hidden   { display: none; }
-
-/* ─── SCREEN 1: HOME ─── */
-#s1 { background: var(–black); transform: translateX(0); }
-
-.s1-stripe {
-background: var(–red);
-padding: 0.5rem 1.2rem;
-font-size: 0.65rem; font-weight: 700;
-letter-spacing: 0.12em; text-transform: uppercase;
-color: white; text-align: center;
-flex-shrink: 0;
+.topbar {
+  background: #c8102e;
+  color: #ffffff;
+  text-align: center;
+  padding: 9px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
 }
 
-.s1-body {
-flex: 1;
-display: flex; flex-direction: column;
-align-items: center; justify-content: center;
-padding: 2rem 1.5rem;
-overflow-y: auto;
+.home-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background: #111111;
 }
 
-.s1-icon {
-width: 72px; height: 72px;
-background: var(–red);
-border-radius: 18px;
-display: flex; align-items: center; justify-content: center;
-box-shadow: 0 8px 32px rgba(200,16,46,0.4);
-margin-bottom: 1.4rem;
+.home-icon {
+  width: 72px;
+  height: 72px;
+  background: #c8102e;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
-.s1-icon svg { width: 36px; height: 36px; }
+.home-icon svg { width: 34px; height: 34px; }
 
-.s1-title {
-font-size: 3.2rem; font-weight: 800;
-color: white; letter-spacing: -0.03em;
-line-height: 1; margin-bottom: 0.5rem;
+.home-title {
+  font-size: 52px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 10px;
 }
-
-.s1-sub {
-font-size: 0.7rem; color: #444;
-letter-spacing: 0.1em; text-transform: uppercase;
-margin-bottom: 3rem;
-}
-
-.s1-btn {
-display: flex; align-items: center; justify-content: space-between;
-width: 100%; max-width: 340px;
-background: var(–card);
-border: 1px solid var(–border-dark);
-border-radius: 14px;
-padding: 1.1rem 1.3rem;
-cursor: pointer;
-transition: border-color 0.2s, background 0.2s, transform 0.15s;
-gap: 1rem;
-}
-.s1-btn:hover { border-color: var(–red); background: #1c1010; }
-.s1-btn:active { transform: scale(0.97); }
-
-.s1-btn-left { display: flex; align-items: center; gap: 0.9rem; }
-
-.s1-btn-ico {
-width: 40px; height: 40px;
-background: rgba(200,16,46,0.12);
-border: 1px solid rgba(200,16,46,0.2);
-border-radius: 10px;
-display: flex; align-items: center; justify-content: center;
-font-size: 1.1rem;
+.home-sub {
+  font-size: 11px;
+  color: #555555;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 44px;
 }
 
-.s1-btn-label { color: #555; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.15rem; }
-.s1-btn-text { color: white; font-size: 0.95rem; font-weight: 700; }
-
-.s1-btn-arrow { color: var(–red); }
-
-.s1-footer {
-text-align: center; padding: 1rem;
-font-size: 0.62rem; color: #222; letter-spacing: 0.05em;
-flex-shrink: 0;
+.home-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 340px;
+  background: #1c1c1c;
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  gap: 14px;
 }
-.s1-footer strong { color: var(–red); }
+.home-card:active { opacity: 0.75; }
 
-/* ─── SHARED NAV BAR ─── */
+.hc-left { display: flex; align-items: center; gap: 14px; }
+.hc-ico {
+  width: 42px; height: 42px;
+  background: rgba(200,16,46,0.18);
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.hc-label { font-size: 10px; color: #555555; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 3px; }
+.hc-text { font-size: 16px; font-weight: 700; color: #ffffff; }
+
+.home-footer {
+  text-align: center;
+  padding: 16px;
+  font-size: 11px;
+  color: #2a2a2a;
+  background: #111111;
+  flex-shrink: 0;
+}
+.home-footer b { color: #c8102e; }
+
+/* ── PANTALLA 2: MATERIAS ── */
+#s2 { background: #f5f5f5; }
+
 .nav-bar {
-display: flex; align-items: center; gap: 0.75rem;
-padding: 0.8rem 1.2rem;
-background: var(–dark);
-border-bottom: 1px solid var(–border-dark);
-flex-shrink: 0;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  flex-shrink: 0;
 }
-
-.nav-back {
-width: 34px; height: 34px;
-background: #1f1f1f; border: 1px solid #2a2a2a;
-border-radius: 9px;
-display: flex; align-items: center; justify-content: center;
-cursor: pointer; color: white;
-transition: background 0.15s;
-flex-shrink: 0;
+.back-btn {
+  width: 36px; height: 36px;
+  background: #f0f0f0;
+  border: none; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #333333;
 }
-.nav-back:hover { background: #2a2a2a; }
-.nav-back:active { background: var(–red); }
+.back-btn:active { background: #c8102e; color: #ffffff; }
+.nav-title { font-size: 15px; font-weight: 700; color: #111111; }
+.nav-sub { font-size: 11px; color: #999999; margin-top: 2px; }
 
-.nav-title { font-size: 0.78rem; font-weight: 600; color: white; }
-.nav-sub { font-size: 0.62rem; color: #444; margin-top: 0.05rem; }
-
-/* ─── SCREEN 2: MATERIAS ─── */
-#s2 { background: var(–dark); }
-
-.s2-hero {
-padding: 1.5rem 1.4rem 1rem;
-border-bottom: 1px solid var(–border-dark);
-flex-shrink: 0;
+.sec-header {
+  padding: 20px 18px 12px;
+  background: #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  flex-shrink: 0;
 }
-.s2-hero h2 {
-font-size: 1.6rem; font-weight: 800;
-color: white; letter-spacing: -0.02em;
-}
-.s2-hero p {
-font-size: 0.68rem; color: #444;
-text-transform: uppercase; letter-spacing: 0.1em;
-margin-top: 0.25rem;
-}
+.sec-header h2 { font-size: 26px; font-weight: 800; color: #111111; }
+.sec-header p { font-size: 11px; color: #999999; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 4px; }
 
-.s2-list {
-flex: 1; overflow-y: auto;
-padding: 1rem 1.2rem 2rem;
-display: flex; flex-direction: column; gap: 0.6rem;
--webkit-overflow-scrolling: touch;
+.mat-list {
+  flex: 1; overflow-y: auto;
+  padding: 14px 14px 32px;
+  display: flex; flex-direction: column; gap: 8px;
 }
-
-.mat-row {
-display: flex; align-items: center; gap: 0.9rem;
-background: var(–card);
-border: 1px solid var(–border-dark);
-border-radius: 12px;
-padding: 1rem 1.1rem;
-cursor: pointer;
-transition: border-color 0.2s, background 0.2s, transform 0.12s;
+.mat-item {
+  display: flex; align-items: center; gap: 14px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
 }
-.mat-row.available:hover { border-color: var(–red); background: #1c1010; }
-.mat-row.available:active { transform: scale(0.98); }
-.mat-row.disabled { opacity: 0.38; cursor: default; }
+.mat-item.available:active { border-color: #c8102e; opacity: 0.85; }
+.mat-item.locked { opacity: 0.4; cursor: default; }
 
-.mat-num-big {
-font-size: 1.5rem; font-weight: 800;
-color: #2a2a2a; min-width: 34px; text-align: center;
+.mat-roman { font-size: 22px; font-weight: 800; color: #dddddd; min-width: 34px; text-align: center; }
+.mat-item.available .mat-roman { color: #c8102e; }
+.mat-texts { flex: 1; }
+.mat-name { font-size: 15px; font-weight: 600; color: #111111; }
+.mat-desc { font-size: 12px; color: #888888; margin-top: 2px; }
+.mat-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px; flex-shrink: 0;
 }
-.mat-row.available .mat-num-big { color: var(–red); }
+.mat-tag.on { background: rgba(200,16,46,0.1); color: #c8102e; border: 1px solid rgba(200,16,46,0.25); }
+.mat-tag.off { background: #f0f0f0; color: #bbbbbb; border: 1px solid #e8e8e8; }
 
-.mat-info { flex: 1; }
-.mat-name { font-size: 0.9rem; font-weight: 600; color: white; line-height: 1.25; }
-.mat-detail { font-size: 0.68rem; color: #444; margin-top: 0.12rem; }
-.mat-row.available .mat-detail { color: #555; }
-
-.mat-chip {
-font-size: 0.57rem; font-weight: 700;
-letter-spacing: 0.07em; text-transform: uppercase;
-padding: 0.22rem 0.6rem; border-radius: 20px; flex-shrink: 0;
-}
-.mat-chip.ok { background: rgba(200,16,46,0.15); color: var(–red); border: 1px solid rgba(200,16,46,0.3); }
-.mat-chip.soon { background: #1a1a1a; color: #333; border: 1px solid #252525; }
-
-/* ─── SCREEN 3: ARTÍCULOS ─── */
-#s3 { background: var(–bg); }
+/* ── PANTALLA 3: ARTICULOS ── */
+#s3 { background: #f5f5f5; }
 
 .art-header {
-background: var(–black);
-flex-shrink: 0;
-box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  background: #ffffff;
+  border-bottom: 1px solid #e8e8e8;
+  flex-shrink: 0;
 }
-
-.art-nav {
-display: flex; align-items: center; gap: 0.75rem;
-padding: 0.75rem 1.2rem 0;
+.art-top {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px 0;
 }
-
-.art-nav-title { flex: 1; }
-.art-nav-title h3 { font-size: 0.88rem; font-weight: 700; color: white; line-height: 1; }
-.art-nav-title small { font-size: 0.6rem; color: #444; letter-spacing: 0.06em; text-transform: uppercase; }
-
+.art-top-info { flex: 1; }
+.art-top-info h3 { font-size: 14px; font-weight: 700; color: #111111; }
+.art-top-info small { font-size: 10px; color: #aaaaaa; letter-spacing: 0.8px; text-transform: uppercase; }
 .art-badge {
-background: var(–red); color: white;
-padding: 0.3rem 0.7rem; border-radius: 6px;
-font-size: 0.8rem; font-weight: 800;
-white-space: nowrap; flex-shrink: 0;
+  background: #c8102e; color: #ffffff;
+  padding: 5px 11px; border-radius: 6px;
+  font-size: 13px; font-weight: 800; white-space: nowrap; flex-shrink: 0;
 }
-.art-badge span { font-size: 0.52rem; display: block; font-weight: 400; letter-spacing: 0.1em; opacity: 0.85; margin-bottom: 0.05rem; }
+.art-badge span { display: block; font-size: 9px; font-weight: 400; opacity: 0.85; margin-bottom: 1px; }
 
-.search-bar {
-display: flex; gap: 0.45rem;
-padding: 0.65rem 1.2rem 0.65rem;
-}
-
-.si { position: relative; flex: 1; }
-.si-ico { position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); color: #555; display: flex; pointer-events: none; }
+.search-wrap { display: flex; gap: 6px; padding: 10px 14px; }
+.si-wrap { position: relative; flex: 1; }
+.si-ico { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #aaaaaa; display: flex; pointer-events: none; }
 #searchInput {
-width: 100%; padding: 0.58rem 0.9rem 0.58rem 2.2rem;
-background: #1e1e1e; border: 1px solid #2a2a2a;
-border-radius: 8px; color: white;
-font-family: var(–font); font-size: 0.82rem; outline: none;
-transition: border-color 0.2s;
+  width: 100%; padding: 9px 12px 9px 32px;
+  background: #f5f5f5; border: 1px solid #e0e0e0;
+  border-radius: 8px; color: #111111;
+  font-family: inherit; font-size: 14px; outline: none;
 }
-#searchInput::placeholder { color: #3a3a3a; }
-#searchInput:focus { border-color: var(–red); }
+#searchInput:focus { border-color: #c8102e; background: #ffffff; }
+#searchInput::placeholder { color: #bbbbbb; }
 
-.ji { display: flex; gap: 0.35rem; }
-.ji input {
-width: 58px; padding: 0.58rem 0.35rem;
-background: #1e1e1e; border: 1px solid #2a2a2a;
-border-radius: 8px; color: white;
-font-family: var(–font); font-size: 0.82rem;
-text-align: center; outline: none;
+.jump-wrap { display: flex; gap: 5px; }
+.jump-wrap input {
+  width: 58px; padding: 9px 6px;
+  background: #f5f5f5; border: 1px solid #e0e0e0;
+  border-radius: 8px; color: #111111;
+  font-family: inherit; font-size: 14px; text-align: center; outline: none;
 }
-.ji input:focus { border-color: var(–red); }
-.ji input::placeholder { color: #3a3a3a; }
-.ji-btn {
-padding: 0.58rem 0.8rem;
-background: var(–red); border: none; border-radius: 8px;
-color: white; font-family: var(–font); font-size: 0.78rem; font-weight: 700;
-cursor: pointer; transition: background 0.15s;
+.jump-wrap input:focus { border-color: #c8102e; }
+.jump-wrap input::placeholder { color: #bbbbbb; }
+.jump-btn {
+  padding: 9px 13px; background: #c8102e; border: none;
+  border-radius: 8px; color: #ffffff;
+  font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
 }
-.ji-btn:hover { background: var(–red-dark); }
+.jump-btn:active { background: #9e0c24; }
 
-.filter-row {
-overflow-x: auto; scrollbar-width: none;
-border-top: 1px solid #1a1a1a;
-}
-.filter-row::-webkit-scrollbar { display: none; }
-.filter-inner {
-display: flex; gap: 0.25rem; align-items: center;
-padding: 0 1.2rem; height: 38px;
-}
+.filter-strip { overflow-x: auto; scrollbar-width: none; border-top: 1px solid #f0f0f0; }
+.filter-strip::-webkit-scrollbar { display: none; }
+.filter-inner { display: flex; gap: 4px; padding: 0 14px; height: 38px; align-items: center; }
 .fb {
-padding: 0.22rem 0.75rem; border-radius: 20px;
-border: 1px solid #272727; background: transparent; color: #666;
-font-size: 0.68rem; cursor: pointer; font-family: var(–font); font-weight: 500;
-transition: all 0.15s; white-space: nowrap;
+  padding: 4px 13px; border-radius: 20px;
+  border: 1px solid #e0e0e0; background: #ffffff; color: #888888;
+  font-size: 11.5px; cursor: pointer; font-family: inherit; font-weight: 500; white-space: nowrap;
 }
-.fb:hover { border-color: var(–red); color: var(–red); }
-.fb.active { background: var(–red); border-color: var(–red); color: white; }
+.fb.active { background: #c8102e; border-color: #c8102e; color: #ffffff; }
+.fb:active { opacity: 0.8; }
 
-/* Article content area */
 .art-body {
-flex: 1;
-overflow-y: auto;
--webkit-overflow-scrolling: touch;
-display: flex;
-gap: 1rem;
-padding: 0.9rem 1rem 4rem;
+  flex: 1; overflow-y: auto;
+  display: flex; gap: 12px;
+  padding: 12px 14px 40px;
 }
 
 .sidebar {
-width: 170px; flex-shrink: 0;
-background: white; border-radius: 8px;
-border: 1px solid var(–border); overflow: hidden;
-align-self: flex-start;
-position: sticky; top: 0;
+  width: 165px; flex-shrink: 0;
+  background: #ffffff; border-radius: 8px; border: 1px solid #eeeeee;
+  overflow: hidden; align-self: flex-start;
+  position: sticky; top: 0;
 }
-.sb-head {
-background: var(–black); color: var(–red);
-padding: 0.6rem 0.9rem;
-font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-}
-.chlist { max-height: 70vh; overflow-y: auto; scrollbar-width: thin; }
-.chitem {
-padding: 0.48rem 0.9rem; font-size: 0.7rem;
-cursor: pointer; color: var(–mid);
-border-left: 3px solid transparent; transition: all 0.15s; line-height: 1.3;
-}
-.chitem:hover { background: var(–red-pale); color: var(–red); border-left-color: var(–red); }
-.chitem.active { background: var(–red-pale); color: var(–red-dark); border-left-color: var(–red-dark); font-weight: 600; }
-.chrange { display: block; font-size: 0.58rem; color: #ccc; margin-bottom: 0.06rem; }
+.sb-head { background: #111111; color: #c8102e; padding: 9px 12px; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+.chlist { max-height: 70vh; overflow-y: auto; }
+.chitem { padding: 7px 12px; font-size: 11.5px; cursor: pointer; color: #777777; border-left: 3px solid transparent; line-height: 1.3; }
+.chitem:active { background: #fff0f2; }
+.chitem.active { background: #fff0f2; color: #9e0c24; border-left-color: #9e0c24; font-weight: 600; }
+.chrange { display: block; font-size: 9.5px; color: #cccccc; margin-bottom: 2px; }
 
 .art-main { flex: 1; min-width: 0; }
-.infobar { font-size: 0.7rem; color: var(–mid); margin-bottom: 0.65rem; padding-left: 0.1rem; }
+.infobar { font-size: 11.5px; color: #888888; margin-bottom: 10px; }
 
-.alist { display: flex; flex-direction: column; gap: 0.6rem; }
+.alist { display: flex; flex-direction: column; gap: 8px; }
 .acard {
-background: white; border-radius: 8px; border: 1px solid var(–border);
-overflow: hidden; transition: box-shadow 0.2s;
-animation: fu 0.18s ease both;
+  background: #ffffff; border-radius: 8px; border: 1px solid #eeeeee; overflow: hidden;
 }
-@keyframes fu { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
-.acard:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-.acard.hl { border-color: var(–red); box-shadow: 0 0 0 3px rgba(200,16,46,0.1); }
+.acard.hl { border-color: #c8102e; }
 
-.chead {
-display: flex; align-items: center; gap: 0.6rem;
-padding: 0.65rem 0.9rem; cursor: pointer; user-select: none;
-transition: background 0.1s;
-}
-.chead:hover { background: #fafafa; }
-.cnum { font-size: 0.85rem; font-weight: 800; color: var(–red); white-space: nowrap; min-width: 55px; }
-.ctag { flex: 1; font-size: 0.63rem; color: var(–mid); font-weight: 500; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cact { display: flex; gap: 0.3rem; align-items: center; flex-shrink: 0; }
+.chead { display: flex; align-items: center; gap: 8px; padding: 10px 13px; cursor: pointer; user-select: none; }
+.chead:active { background: #fafafa; }
+.cnum { font-size: 13px; font-weight: 800; color: #c8102e; white-space: nowrap; min-width: 54px; }
+.ctag { flex: 1; font-size: 10.5px; color: #999999; font-weight: 500; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cact { display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
 
 .btn-expl {
-display: flex; align-items: center; gap: 0.22rem;
-padding: 0.24rem 0.6rem;
-background: rgba(200,16,46,0.07); border: 1px solid rgba(200,16,46,0.18);
-border-radius: 4px; color: var(–red);
-font-size: 0.64rem; font-weight: 700; font-family: var(–font);
-cursor: pointer; transition: all 0.15s;
+  padding: 4px 10px;
+  background: rgba(200,16,46,0.08); border: 1px solid rgba(200,16,46,0.2);
+  border-radius: 5px; color: #c8102e;
+  font-size: 10.5px; font-weight: 700; font-family: inherit; cursor: pointer;
 }
-.btn-expl:hover { background: var(–red); color: white; }
+.btn-expl:active { background: #c8102e; color: #ffffff; }
 
-.btog {
-background: none; border: none; cursor: pointer; color: #ccc;
-padding: 0.12rem; display: flex; align-items: center;
-transition: color 0.15s, transform 0.2s;
-}
-.btog:hover { color: var(–red); }
-.btog.open { transform: rotate(180deg); color: var(–red); }
+.btog { background: none; border: none; cursor: pointer; color: #cccccc; padding: 2px; display: flex; align-items: center; }
+.btog.open { transform: rotate(180deg); color: #c8102e; }
 
-.cbody { display: none; padding: 0.75rem 0.9rem 0.9rem; border-top: 1px solid var(–border); background: #fefefe; }
+.cbody { display: none; padding: 11px 13px 14px; border-top: 1px solid #f0f0f0; background: #fefefe; }
 .cbody.open { display: block; }
-.art-text { font-size: 0.84rem; line-height: 1.75; color: #333; }
+.art-text { font-size: 13.5px; line-height: 1.75; color: #333333; }
 
-.exbox { display: none; margin-top: 0.7rem; padding: 0.7rem 0.9rem; background: var(–red-pale); border-radius: 6px; border-left: 3px solid var(–red); }
+.exbox { display: none; margin-top: 10px; padding: 11px 13px; background: #fff0f2; border-radius: 6px; border-left: 3px solid #c8102e; }
 .exbox.open { display: block; }
-.exlabel { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(–red); margin-bottom: 0.38rem; }
-.excontent { font-size: 0.82rem; line-height: 1.65; color: #3a1a1a; }
-.excontent strong { color: var(–red-dark); font-weight: 700; }
+.exlabel { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: #c8102e; margin-bottom: 6px; }
+.excontent { font-size: 13px; line-height: 1.65; color: #3a1a1a; }
+.excontent strong { color: #9e0c24; font-weight: 700; }
 
 mark { background: rgba(200,16,46,0.13); color: inherit; border-radius: 2px; padding: 0 2px; }
-.empty { text-align: center; padding: 3rem 1rem; color: var(–light); font-size: 0.86rem; }
+.empty { text-align: center; padding: 48px 16px; color: #aaaaaa; font-size: 14px; }
 
-/* ─── RESPONSIVE ─── */
-@media (max-width: 600px) {
-.sidebar { display: none; }
-.art-body { padding: 0.75rem 0.75rem 4rem; }
-.s1-title { font-size: 2.6rem; }
-.search-bar { padding: 0.55rem 0.9rem; }
-.art-nav { padding: 0.65rem 0.9rem 0; }
-.filter-inner { padding: 0 0.9rem; }
+@media (max-width: 580px) {
+  .sidebar { display: none; }
+  .art-body { padding: 10px 10px 40px; }
+  .home-title { font-size: 42px; }
+  .ctag { display: none; }
 }
 </style>
-
 </head>
 <body>
-<div id="app">
 
-<!-- ══ PANTALLA 1: INICIO ══ -->
-
-<div id="s1" class="screen active">
-  <div class="s1-stripe">Materiales de Estudio &nbsp;·&nbsp; <strong>Elias Jara</strong></div>
-  <div class="s1-body">
-    <div class="s1-icon">
-      <svg fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24">
+<!-- PANTALLA 1 -->
+<div id="s1" class="screen show">
+  <div class="topbar">Materiales de Estudio &middot; <b>Elias Jara</b></div>
+  <div class="home-body">
+    <div class="home-icon">
+      <svg fill="none" stroke="#ffffff" stroke-width="2.2" viewBox="0 0 24 24">
         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
       </svg>
     </div>
-    <div class="s1-title">Derecho</div>
-    <div class="s1-sub">Materiales de Estudio · Elias Jara</div>
-    <div class="s1-btn" onclick="nav('s2')">
-      <div class="s1-btn-left">
-        <div class="s1-btn-ico">📚</div>
+    <div class="home-title">Derecho</div>
+    <div class="home-sub">Materiales de Estudio &middot; Elias Jara</div>
+    <div class="home-card" onclick="goTo('s2')">
+      <div class="hc-left">
+        <div class="hc-ico">&#128218;</div>
         <div>
-          <div class="s1-btn-label">Ver todas</div>
-          <div class="s1-btn-text">Materias</div>
+          <div class="hc-label">Ver todas</div>
+          <div class="hc-text">Materias</div>
         </div>
       </div>
-      <div class="s1-btn-arrow">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
+      <svg width="18" height="18" fill="none" stroke="#c8102e" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
     </div>
   </div>
-  <div class="s1-footer">Código Civil del Paraguay — Ley N° 1183/85 &nbsp;·&nbsp; <strong>Elias Jara</strong></div>
+  <div class="home-footer">Ley N&deg; 1183/85 &middot; <b>Elias Jara</b></div>
 </div>
 
-<!-- ══ PANTALLA 2: MATERIAS ══ -->
-
+<!-- PANTALLA 2 -->
 <div id="s2" class="screen">
   <div class="nav-bar">
-    <div class="nav-back" onclick="nav('s1', true)">
+    <button class="back-btn" onclick="goBack()">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    </div>
+    </button>
     <div>
       <div class="nav-title">Materias</div>
-      <div class="nav-sub">Seleccioná una materia</div>
+      <div class="nav-sub">Selecciona una materia</div>
     </div>
   </div>
-  <div class="s2-hero">
+  <div class="sec-header">
     <h2>Materias</h2>
-    <p>Carrera de Derecho</p>
+    <p>Carrera de Derecho &mdash; Elias Jara</p>
   </div>
-  <div class="s2-list">
-    <div class="mat-row available" onclick="nav('s3')">
-      <div class="mat-num-big">III</div>
-      <div class="mat-info">
+  <div class="mat-list">
+    <div class="mat-item available" onclick="goTo('s3')">
+      <div class="mat-roman">III</div>
+      <div class="mat-texts">
         <div class="mat-name">Derecho Civil III</div>
-        <div class="mat-detail">Hechos y Actos Jurídicos · Arts. 277–416</div>
+        <div class="mat-desc">Hechos y Actos Juridicos &middot; Arts. 277&ndash;416</div>
       </div>
-      <div class="mat-chip ok">Disponible</div>
+      <div class="mat-tag on">Disponible</div>
     </div>
-    <div class="mat-row disabled">
-      <div class="mat-num-big">I</div>
-      <div class="mat-info">
-        <div class="mat-name">Derecho Civil I</div>
-        <div class="mat-detail">Personas y Familia</div>
-      </div>
-      <div class="mat-chip soon">Próximamente</div>
-    </div>
-    <div class="mat-row disabled">
-      <div class="mat-num-big">II</div>
-      <div class="mat-info">
-        <div class="mat-name">Derecho Civil II</div>
-        <div class="mat-detail">Bienes y Derechos Reales</div>
-      </div>
-      <div class="mat-chip soon">Próximamente</div>
-    </div>
-    <div class="mat-row disabled">
-      <div class="mat-num-big">IV</div>
-      <div class="mat-info">
-        <div class="mat-name">Derecho Civil IV</div>
-        <div class="mat-detail">Obligaciones</div>
-      </div>
-      <div class="mat-chip soon">Próximamente</div>
-    </div>
-    <div class="mat-row disabled">
-      <div class="mat-num-big">V</div>
-      <div class="mat-info">
-        <div class="mat-name">Derecho Civil V</div>
-        <div class="mat-detail">Contratos</div>
-      </div>
-      <div class="mat-chip soon">Próximamente</div>
-    </div>
-    <div class="mat-row disabled">
-      <div class="mat-num-big">VI</div>
-      <div class="mat-info">
-        <div class="mat-name">Derecho Penal</div>
-        <div class="mat-detail">Parte General</div>
-      </div>
-      <div class="mat-chip soon">Próximamente</div>
-    </div>
+    <div class="mat-item locked"><div class="mat-roman">I</div><div class="mat-texts"><div class="mat-name">Derecho Civil I</div><div class="mat-desc">Personas y Familia</div></div><div class="mat-tag off">Proximamente</div></div>
+    <div class="mat-item locked"><div class="mat-roman">II</div><div class="mat-texts"><div class="mat-name">Derecho Civil II</div><div class="mat-desc">Bienes y Derechos Reales</div></div><div class="mat-tag off">Proximamente</div></div>
+    <div class="mat-item locked"><div class="mat-roman">IV</div><div class="mat-texts"><div class="mat-name">Derecho Civil IV</div><div class="mat-desc">Obligaciones</div></div><div class="mat-tag off">Proximamente</div></div>
+    <div class="mat-item locked"><div class="mat-roman">V</div><div class="mat-texts"><div class="mat-name">Derecho Civil V</div><div class="mat-desc">Contratos</div></div><div class="mat-tag off">Proximamente</div></div>
   </div>
 </div>
 
-<!-- ══ PANTALLA 3: ARTÍCULOS ══ -->
-
+<!-- PANTALLA 3 -->
 <div id="s3" class="screen">
   <div class="art-header">
-    <div class="art-nav">
-      <div class="nav-back" onclick="nav('s2', true)">
+    <div class="art-top">
+      <button class="back-btn" onclick="goBack()">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="art-top-info">
+        <h3>Civil III &mdash; Actos Juridicos</h3>
+        <small>Codigo Civil del Paraguay &middot; Ley 1183/85</small>
       </div>
-      <div class="art-nav-title">
-        <h3>Civil III — Actos Jurídicos</h3>
-        <small>Código Civil del Paraguay · Ley 1183/85</small>
-      </div>
-      <div class="art-badge"><span>Arts.</span>277–416</div>
+      <div class="art-badge"><span>Arts.</span>277&ndash;416</div>
     </div>
-    <div class="search-bar">
-      <div class="si">
+    <div class="search-wrap">
+      <div class="si-wrap">
         <span class="si-ico"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
-        <input type="text" id="searchInput" placeholder="Buscar artículo o palabra clave…" autocomplete="off">
+        <input type="text" id="searchInput" placeholder="Buscar articulo o palabra clave..." autocomplete="off">
       </div>
-      <div class="ji">
-        <input type="number" id="jumpInput" placeholder="N°" min="277" max="416">
-        <button class="ji-btn" onclick="jumpTo()">Ir</button>
+      <div class="jump-wrap">
+        <input type="number" id="jumpInput" placeholder="N" min="277" max="416">
+        <button class="jump-btn" onclick="jumpTo()">Ir</button>
       </div>
     </div>
-    <div class="filter-row"><div class="filter-inner" id="filters"></div></div>
+    <div class="filter-strip"><div class="filter-inner" id="filters"></div></div>
   </div>
   <div class="art-body">
     <aside class="sidebar">
-      <div class="sb-head">Índice</div>
+      <div class="sb-head">Indice</div>
       <div class="chlist" id="chlist"></div>
     </aside>
     <div class="art-main">
@@ -523,55 +392,28 @@ mark { background: rgba(200,16,46,0.13); color: inherit; border-radius: 2px; pad
   </div>
 </div>
 
-</div><!-- #app -->
-
 <script>
-// ─── NAVEGACIÓN ───────────────────────────────────────
-const history_stack = ['s1'];
+var stack = ['s1'];
 
-function nav(to, back) {
-  const current = history_stack[history_stack.length - 1];
-  if (current === to) return;
-
-  const fromEl = document.getElementById(current);
-  const toEl = document.getElementById(to);
-
-  if (back) {
-    // Going back: new screen comes from left
-    toEl.style.transform = 'translateX(-100%)';
-    toEl.classList.remove('hidden');
-    requestAnimationFrame(() => {
-      toEl.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
-      fromEl.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
-      toEl.style.transform = 'translateX(0)';
-      fromEl.style.transform = 'translateX(100%)';
-    });
-    history_stack.pop();
-  } else {
-    // Going forward: new screen comes from right
-    toEl.style.transform = 'translateX(100%)';
-    toEl.classList.remove('hidden');
-    requestAnimationFrame(() => {
-      toEl.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
-      fromEl.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
-      toEl.style.transform = 'translateX(0)';
-      fromEl.style.transform = 'translateX(-30%)';
-    });
-    history_stack.push(to);
-  }
-
-  setTimeout(() => {
-    fromEl.style.transform = '';
-    fromEl.style.transition = '';
-    fromEl.classList.add('hidden');
-    toEl.style.transition = '';
-  }, 320);
+function goTo(id) {
+  var cur = stack[stack.length - 1];
+  if (cur === id) return;
+  document.getElementById(cur).classList.remove('show');
+  document.getElementById(id).classList.add('show');
+  window.scrollTo(0, 0);
+  stack.push(id);
 }
 
-// Init: hide non-active screens
-document.querySelectorAll('.screen:not(#s1)').forEach(s => s.classList.add('hidden'));
+function goBack() {
+  if (stack.length < 2) return;
+  var cur = stack[stack.length - 1];
+  stack.pop();
+  var prev = stack[stack.length - 1];
+  document.getElementById(cur).classList.remove('show');
+  document.getElementById(prev).classList.add('show');
+  window.scrollTo(0, 0);
+}
 
-// ─── DATOS ───────────────────────────────────────────
 const RAW={"277":"Art.277.- Los actos voluntarios previstos en este Código son los que ejecutados con discernimiento, intención y libertad determinan una adquisición, modificación o extinción de derechos. Los que no reuniesen tales requisitos, no producirán por sí efecto alguno.","278":"Art.278.- Los actos se juzgarán ejecutados sin discernimiento: a) cuando sus agentes no hubiesen cumplido catorce años; b) cuando sus autores, por cualquier causa estuviesen privados de razón; y c) si procediesen de personas sujetas a interdicción o inhabilitación. Se tendrán como cumplidos sin intención, los viciados por error o dolo; y sin libertad, cuando mediase fuerza o temor.","279":"Art.279.- Ningún acto tendrá el carácter de voluntario, sin un hecho exterior por el cual la voluntad se manifieste.","280":"Art.280.- La voluntad podrá manifestarse, ya en un hecho material consumado, ya simplemente en su expresión positiva o tácita.","281":"Art.281.- Se tendrá como declaración positiva de la voluntad, aquélla que se manifieste verbalmente, o por escrito, o por signos inequívocos. No valdrá sin embargo, la que no revista las solemnidades prescriptas, cuando la ley exigiere una forma determinada.","282":"Art.282.- La manifestación tácita resultará de aquellos actos por los cuales se pueda conocer con certidumbre la existencia de la voluntad. El silencio será juzgado como asentimiento cuando exista deber legal de explicarse.","283":"Art.283.- Nadie puede obligar a otro a hacer alguna cosa, o restringir su libertad, sin estar legalmente autorizado para ello.","284":"Art.284.- Cuando por hechos involuntarios se causare a otro algún daño en su persona o bienes, sólo se responderá con la indemnización correspondiente, si con el daño se enriqueció el autor del hecho.","285":"Art.285.- La ignorancia de las leyes o el error de derecho no impedirá el efecto de los actos lícitos, ni excusará la responsabilidad por los ilícitos.","286":"Art.286.- No será válida la declaración de voluntad cuando el error recayere sobre: a) la naturaleza del acto; b) la persona con quien se formó la relación jurídica; c) la causa principal del acto; d) el objeto, en el caso de haberse indicado un bien diverso; y e) cualquier otra circunstancia que, de buena fe, pudo considerar el agente como elemento necesario del acto.","287":"Art.287.- No invalida el acto el error sobre cualidades de la cosa, aunque hubiese sido motivo determinante del acto, a no ser que mediare garantía expresa o que el agente se hubiese decidido por dolo.","288":"Art.288.- La parte que ha sufrido error no puede prevalerse de él contra las reglas de la buena fe. Estará obligado a ejecutar la prestación a que entendió comprometerse si la otra parte se allanare al cumplimiento.","289":"Art.289.- El error no perjudica cuando ha habido razón para errar, pero no podrá ser alegado cuando procediere de negligencia imputable. En este caso deberá indemnizar a la otra parte el daño sufrido.","290":"Art.290.- Acción dolosa para conseguir la ejecución de un acto, es toda aserción falsa o disimulación de lo verdadero, cualquier astucia, artificio o maquinación que se emplee con ese fin. Las reglas se aplican igualmente a las omisiones dolosas.","291":"Art.291.- Para que el dolo cause la nulidad del acto se requiere que haya determinado la declaración de voluntad y que ocasione daño. El dolo incidental sólo obligará al resarcimiento del perjuicio.","292":"Art.292.- El dolo afectará la validez de los actos, sea que provenga de las partes o de un tercero.","293":"Art.293.- Habrá falta de libertad en el agente cuando se empleare contra él fuerza irresistible. Hubo intimidación cuando por injustas amenazas alguien causare al agente temor fundado de sufrir cualquier mal inminente y grave en su persona, libertad, honra o bienes, o en la de su cónyuge, descendientes, ascendientes o parientes colaterales.","294":"Art.294.- El ejercicio normal de los derechos no podrá determinar injustas amenazas. Sin embargo, cuando por este medio se hubiesen arrancado ventajas excesivas, la violencia moral podrá considerarse suficiente para anular el acto.","295":"Art.295.- La fuerza o la intimidación vicia el acto, aunque se la haya empleado por un tercero. Si una de las partes lo sabía, responderá solidariamente con el autor por los daños.","296":"Art.296.- Son actos jurídicos los actos voluntarios lícitos, que tengan por fin inmediato crear, modificar, transferir, conservar o extinguir derechos.","297":"Art.297.- Los actos jurídicos serán regidos exclusivamente por las leyes de la República, cuando hubieren de ser ejecutados en su territorio, en cuanto a su formación, prueba, validez y efectos.","298":"Art.298.- La incapacidad de una de las partes no puede ser invocada en provecho propio por la parte capaz.","299":"Art.299.- No podrá ser objeto de los actos jurídicos: a) aquello que no esté dentro del comercio; b) lo comprendido en una prohibición de la ley; y c) los hechos imposibles, ilícitos, contrarios a la moral y a las buenas costumbres.","300":"Art.300.- La calificación jurídica errónea que del acto hagan las partes no perjudica su eficacia, que se juzgará según el contenido real. Cuando hubiese palabras que no armonicen con la intención reflejada en el acto, prevalecerá ésta.","301":"Art.301.- Los actos jurídicos producen el efecto declarado por las partes, el virtualmente comprendido en ellos y el que les asigne la ley.","302":"Art.302.- En la celebración de los actos jurídicos deberán observarse las solemnidades prescriptas por la ley. A falta de regla especial, las partes podrán emplear las formas que estimen convenientes.","303":"Art.303.- Cuando una determinada forma instrumental fuere exclusivamente prescripta por la ley, no se la podrá suplir por otra. Esta cláusula y el acto mismo serán nulos.","304":"Art.304.- La expresión por escrito puede tener lugar por instrumento público o instrumento privado, salvo los casos en que la forma de instrumento público fuere exclusivamente dispuesta.","305":"Art.305.- La simulación no es reprobada por la ley cuando a nadie perjudica ni tiene un fin ilícito.","306":"Art.306.- Se podrá anular el acto jurídico cuando por la simulación se perjudica a un tercero o se persigue un fin ilícito.","307":"Art.307.- Si hubiere un contra documento firmado por alguna de las partes para dejar el acto simulado, los jueces pueden conocer sobre él y sobre la simulación.","308":"Art.308.- Los terceros perjudicados por un acto simulado tienen acción para demandar su anulación, pero la sentencia no afectará los actos celebrados a título oneroso con personas de buena fe.","309":"Art.309.- La simulación no podrá ser opuesta por los contratantes a los acreedores del titular aparente que de buena fe hubieren realizados actos de ejecución sobre bienes del contrato simulado.","310":"Art.310.- La prueba de la simulación será admisible sin limitación si la demanda fuere promovida por terceros o para invocar la ilicitud del acto simulado.","311":"Art.311.- Los actos de disposición a título gratuito practicados por el deudor insolvente pueden ser revocados a instancia de los acreedores.","312":"Art.312.- Serán igualmente revocables los actos onerosos practicados por el deudor insolvente, cuando la insolvencia fuere notoria o hubiera fundado motivo para ser conocida del otro contratante, y el crédito sea anterior al acto fraudulento.","313":"Art.313.- Si el deudor renunciare derechos con lo que pudo mejorar su fortuna o impedir su disminución, podrá el acreedor obtener la revocación de dicha renuncia.","314":"Art.314.- También procederá la revocación cuando el deudor constituyere derechos reales de garantía sobre sus bienes en perjuicio de sus acreedores.","315":"Art.315.- La revocación será pronunciada exclusivamente en interés del acreedor que la pidió, y hasta el importe de su crédito.","316":"Art.316.- Obtenida la revocación, el acreedor puede promover las acciones ejecutivas o conservatorias respecto de los bienes que constituyen el objeto del acto revocado. El cómplice en el fraude debe devolverlos como poseedor de mala fe.","317":"Art.317.- El que hubiere adquirido de mala fe las cosas enajenadas en fraude de los acreedores, deberá indemnizar a éstos cuando la cosa hubiere pasado a un subadquirente de buena fe o cuando se hubiere perdido.","318":"Art.318.- En los actos jurídicos las partes podrán subordinar a un acontecimiento futuro e incierto la existencia o la resolución de sus efectos.","319":"Art.319.- La condición de un hecho imposible, contrario a la moral o prohibido por las leyes, deja sin efecto el acto jurídico. Quedan especialmente prohibidas las condiciones de: habitar siempre un lugar, mudar de religión, casarse con determinada persona, o vivir célibe.","320":"Art.320.- La condición debe cumplirse de la manera como se la estipuló. El cumplimiento de la condición es indivisible aunque la prestación consista en hechos divisibles.","321":"Art.321.- La condición se juzgará cumplida cuando las partes a quienes aprovecha voluntariamente la renuncien, o cuando un tercero del que dependía se negare a actuar.","322":"Art.322.- Si la relación de derecho fuere subordinada a una condición resolutoria, sus efectos cesan por el cumplimiento de ella. Se restablece el estado anterior y debe restituirse lo recibido.","323":"Art.323.- Pendiente la condición suspensiva no puede exigirse el cumplimiento de la obligación. Si por error el deudor entregó bienes, podrá repetirlos. Si la condición no se cumple, el acto no existió.","324":"Art.324.- El que tenga un derecho bajo condición suspensiva podrá exigir daños y perjuicios si, durante la suspensión, la otra parte destruyó o limitó el derecho pendiente.","325":"Art.325.- Si alguien dispuso de un objeto bajo condición suspensiva, todo acto posterior sobre dicho objeto será ineficaz si la condición se cumple y perjudica el efecto dependiente de ella.","326":"Art.326.- Cumplida la condición, quedan subsistentes los actos de administración realizados por el propietario durante el tiempo intermedio.","327":"Art.327.- Pendiente la condición, los interesados podrán usar de todas las medidas conservatorias de los derechos que les corresponderían si ella se cumpliera.","328":"Art.328.- El cargo impuesto sólo impedirá el efecto del acto jurídico cuando importe una condición suspensiva. En caso de duda se entenderá que tal condición no ha existido.","329":"Art.329.- Si hubiere condición resolutoria por falta de cumplimiento del cargo impuesto, será necesaria la sentencia del juez para que el beneficiario pierda el derecho adquirido.","330":"Art.330.- Si no hubiere condición resolutoria, la falta de cumplimiento del cargo no produce pérdida de los bienes adquiridos, y queda a salvo el derecho de constreñir judicialmente al gravado a cumplir el cargo.","331":"Art.331.- A falta de plazo determinado, el cargo deberá cumplirse dentro del señalado por el juez.","332":"Art.332.- La obligación de cumplir el cargo pasa a los herederos del gravado, salvo que sólo pudiera ser cumplido por él como inherente a su persona. Si fallece sin cumplirlo, la adquisición del derecho queda sin efecto.","333":"Art.333.- Si el hecho no fuere absolutamente imposible pero llegare a serlo después sin culpa del adquirente, la adquisición subsistirá y los bienes quedarán adquiridos sin cargo alguno.","334":"Art.334.- Podrá establecerse que el efecto jurídico de un acto no sea exigible antes de vencer el plazo, o que se extinguirá al término de éste. El término podrá referirse a una fecha dada o a un acontecimiento futuro necesario.","335":"Art.335.- El plazo en los actos jurídicos se presume establecido a favor de todos los interesados. El pago no podrá hacerse antes del término sino de común acuerdo.","336":"Art.336.- El deudor sometido a concurso no puede reclamar el plazo. El acreedor puede exigir inmediatamente la prestación si el deudor hubiese disminuido, por acto propio, las garantías prometidas.","337":"Art.337.- Si el plazo se fijare por meses o por años, se contará el mes de treinta días, y el año de trescientos sesenta y cinco días, por el calendario gregoriano.","338":"Art.338.- Los plazos de días se contarán desde el día siguiente al de la celebración del acto. El plazo incluye el día del vencimiento. Si fuere domingo o feriado, el cumplimiento tendrá lugar el primer día siguiente hábil.","339":"Art.339.- El plazo establecido por meses o por años concluirá al transcurrir el día del último mes que tenga el mismo número que aquél en que comenzó a correr.","340":"Art.340.- Cuando el plazo comenzare a correr desde el último día de un mes de más días que aquél en que terminare, éste vencerá el último día de este mes.","341":"Art.341.- Todos los plazos serán continuos y completos, debiendo siempre terminar en la media noche del último día. Se computarán los días domingos y feriados, salvo disposición expresa en contrario.","342":"Art.342.- Las disposiciones sobre plazos serán aplicables a todos los plazos señalados por las leyes, por los jueces, o por las partes en los actos jurídicos.","343":"Art.343.- Podrán celebrarse por medio de representantes los actos jurídicos entre vivos. Los que versaren sobre derechos de familia sólo admiten representación en los casos expresamente autorizados.","344":"Art.344.- Los actos del representado se reputarán celebrados por el representante, siempre que los ejecutare dentro de los límites de sus poderes. Si se excediere pero los terceros fueren de buena fe, se estimará que obró dentro de sus facultades.","345":"Art.345.- Los terceros con quienes los representantes concertaren un negocio tienen derecho a exigir que se les presente el instrumento que acredite la representación.","346":"Art.346.- Si el representante careciere de poderes o los hubiere excedido y el representado no ratificare el acto, éste no obligará al representado.","347":"Art.347.- La ratificación equivale a la representación. Tiene efecto retroactivo al día del acto, pero quedan a salvo los derechos de los terceros.","348":"Art.348.- El representante deberá: a) atenerse a sus poderes; b) abstenerse de formalizar consigo mismo un acto jurídico sin autorización; c) abstenerse de aplicar fondos a sus negocios propios; y d) no usar de sus poderes en beneficio propio.","349":"Art.349.- El representado deberá atenerse a la fecha de los instrumentos que su representante hubiere suscrito, salvo que pruebe que fueron antedatados.","350":"Art.350.- Cuando la eficacia de un acto dependiese de la voluntad de un tercero, el asentimiento o la negativa de éste podrá hacerse a cualquiera de los interesados.","351":"Art.351.- El asentimiento será revocable hasta el momento de la ejecución del acto, a menos que resulte lo contrario de la relación jurídica en virtud de la cual se otorgó.","352":"Art.352.- Los efectos del asentimiento prestado posteriormente se retrotraerán, salvo convención en contrario, al tiempo de la celebración del acto. La facultad de aprobar se transmite a los herederos.","353":"Art.353.- Queda revalidado el acto de disposición realizado por quien no pudiere hacerlo legalmente: a) cuando lo autorizó el titular; b) cuando la autorización previa fuere otorgada posteriormente; c) si luego adquiere el objeto; y d) si heredare al dueño.","355":"Art.355.- Las únicas nulidades que los jueces pueden declarar son las que expresa o implícitamente se establecen en este Código.","356":"Art.356.- Los actos nulos no producen efectos aunque su nulidad no haya sido juzgada. Los actos anulables se reputarán válidos mientras no sean anulados.","357":"Art.357.- Es nulo el acto jurídico: a) cuando lo realizó un incapaz por falta de discernimiento; b) si el acto o su objeto fueren ilícitos o imposibles; c) si no reviste la forma prescripta por la ley; d) si dependiendo su validez de la forma instrumental, fuese nulo el instrumento; y e) cuando el agente procediese con simulación o fraude presumidos por la ley.","358":"Art.358.- Es anulable el acto jurídico: a) cuando el agente obrare con incapacidad accidental; b) cuando ejecutado por un incapaz de hecho, éste tuviese discernimiento; c) si estuviese viciado de error, dolo, violencia o simulación; d) si fuese anulable el instrumento respectivo; y e) si fuese practicado contra la prohibición de disponer dictada por juez competente.","359":"Art.359.- Cuando el acto es nulo, su nulidad debe ser declarada de oficio por el juez si aparece manifiesta. El Ministerio Público y todos los interesados tendrán derecho para alegarla.","360":"Art.360.- Cuando un incapaz hubiere procedido con dolo para inducir a la otra parte a consentir, ni él ni sus sucesores tendrán derecho a anular el acto. Si fuere menor, la simple afirmación de su mayor edad no impide la declaración de nulidad.","361":"Art.361.- La nulidad pronunciada por los jueces vuelve las cosas al mismo estado en que se hallaban antes del acto anulado, e impone a las partes la obligación de restituirse mutuamente todo lo recibido.","362":"Art.362.- Si el acto fuere nulo por incapacidad de hecho, la parte capaz no podrá exigir la restitución de lo entregado, salvo si probare que aún existe en poder del incapaz lo que le hubiere dado o que el acto redundó en su provecho.","363":"Art.363.- Todos los derechos transmitidos a terceros sobre un inmueble por quien llegó a ser propietario en virtud del acto anulado, quedan sin valor y pueden ser reclamados del poseedor actual.","364":"Art.364.- Los actos nulos y los anulables, aunque no produzcan los efectos de los actos jurídicos, pueden producir los efectos de los actos ilícitos, cuyas consecuencias deben ser reparadas.","365":"Art.365.- La nulidad de un acto jurídico puede ser total o parcial. En los testamentos la ineficacia de una disposición particular no afectará la validez de las otras, con tal que sean separables.","366":"Art.366.- Se tendrá por confirmado un acto anulable cuando quien tuviere el derecho para pedir la anulación hiciere desaparecer los vicios, después de cesar la incapacidad o defecto del que provenía la invalidez.","367":"Art.367.- La confirmación puede ser expresa o tácita. El instrumento de confirmación expresa debe contener, bajo pena de nulidad, la substancia del acto que se quiere confirmar, el vicio de que adolecía y la intención de repararlo.","368":"Art.368.- La forma del instrumento de confirmación debe ser la misma establecida para el acto que se confirma.","369":"Art.369.- La confirmación tácita es la que resulta de la ejecución voluntaria, total o parcial, del acto anulable.","370":"Art.370.- La confirmación, sea expresa o tácita, no exige el concurso de la parte a cuyo favor se hace.","371":"Art.371.- La confirmación tiene efecto retroactivo al día en que tuvo lugar el acto entre vivos, o al día de fallecimiento del testador en los actos de última voluntad.","372":"Art.372.- Los derechos deben ser ejercidos de buena fe. El ejercicio abusivo de los derechos no está amparado por la ley y compromete la responsabilidad del agente por el perjuicio que cause.","373":"Art.373.- Un hecho impuesto por la legítima defensa no es contrario al derecho. Esta defensa tiene lugar cuando es exigida para apartar de sí o de otro un ataque actual ejercido en violación del derecho.","374":"Art.374.- El que deteriore o destruya la cosa ajena para apartar de sí o de otro el daño con que esa amenace, no actúa contra el derecho cuando el deterioro o la destrucción sea exigido para alejar el peligro.","375":"Art.375.- Son instrumentos públicos: a) las escrituras públicas; b) instrumentos que autoricen los escribanos o funcionarios públicos; c) diligencias y planos de mensuras aprobados por la autoridad judicial; d) las actuaciones judiciales; e) letras aceptadas por el Gobierno; f) inscripciones de la deuda pública; g) asientos de los registros públicos; y h) copias o fotocopias autorizadas de los instrumentos públicos.","376":"Art.376.- La validez del instrumento público requiere: a) que el autorizante obre en los límites de sus atribuciones; b) que se extienda dentro de la jurisdicción territorial asignada al oficial público; y c) que contenga la firma del funcionario autorizante, así como las de todos los que aparezcan como partes o testigos.","377":"Art.377.- Son instrumentos nulos: a) los que el oficial público autorizó después de serle comunicada su suspensión o destitución; b) aquellos en que el autorizante o sus parientes dentro del cuarto grado tuvieren interés personal; y c) los que no llenaren las condiciones de validez prescritas.","378":"Art.378.- Serán anulables: a) si el oficial público, las partes o los testigos los hubieran suscripto por error, dolo o violencia; y b) siempre que tuvieren enmiendas, borraduras o alteraciones en puntos capitales, no salvadas antes de las firmas.","379":"Art.379.- El instrumento autorizado por oficial incompetente, o que no tuviere las formas legales, valdrá como documento privado si lo hubieren suscripto las partes.","380":"Art.380.- No pueden ser testigos en los instrumentos públicos: a) los menores de edad; b) los sometidos a interdicción o inhabilitación; c) los ciegos; d) los que no sepan o puedan firmar; e) los dependientes del oficial autorizante; f) el cónyuge y los parientes del oficial y de las partes; y g) los que por sentencia se hallaren inhabilitados para ser testigos.","381":"Art.381.- El error sobre la capacidad de testigos incapaces que generalmente eran tenidos como capaces, salva la nulidad del acto.","382":"Art.382.- Los testigos de un instrumento público y el oficial que lo autorizó no podrán contradecir, variar ni alterar su contenido, a no ser que lo hubieren suscripto por dolo o violencia.","383":"Art.383.- El instrumento público hará plena fe mientras no fuere argüido de falso por acción criminal o civil, sobre la realidad de los hechos que el autorizante enunciare como cumplidos por él o pasados en su presencia.","384":"Art.384.- Los jueces pueden declarar de oficio la falsedad de un instrumento público presentado en juicio, si de su contexto resultare manifiesto hallarse viciado de falsedad o alteraciones en partes esenciales.","385":"Art.385.- Los instrumentos públicos hacen plena fe entre las partes y contra terceros: a) en cuanto a la circunstancia de haberse ejecutado el acto; b) respecto de las convenciones, disposiciones, pagos y reconocimientos contenidos en ellos; y c) acerca de las enunciaciones de hechos relacionados con el acto.","386":"Art.386.- El contenido de un instrumento público puede ser modificado o dejado sin efecto por un contradocumento público o privado que los interesados otorguen.","387":"Art.387.- Cuando se hubieran destruido o desaparecido los instrumentos públicos originales y existieren copias autorizadas, el juez podrá ordenar que la copia sea archivada en el protocolo de un escribano de registro como instrumento original.","388":"Art.388.- Si no existiere copia que pudiere utilizarse, el acto jurídico podrá ser probado por las menciones que existan en otros instrumentos públicos o por las constancias de los registros públicos.","389":"Art.389.- Las escrituras y demás actos públicos sólo podrán ser autorizados por los notarios y escribanos de registro. En los lugares donde no haya escribanos públicos, serán autorizados por los jueces de Paz.","390":"Art.390.- Las escrituras deben redactarse en español. Si los comparecientes no supieren hablarlo, la escritura se hará conforme a una minuta en su idioma, vertida al español por traductor público matriculado.","391":"Art.391.- Si cualquiera de los otorgantes fuere sordomudo o mudo que sepa darse a entender por escrito, la escritura se hará de acuerdo con una minuta cuyas firmas deberán reconocer ante el escribano.","392":"Art.392.- Si el escribano no conociere a las partes, deberán éstas acreditar su identidad con documento legal idóneo, o con el testimonio de dos personas conocidas del escribano.","393":"Art.393.- Si las partes actuaren por medio de representantes, el notario transcribirá los poderes generales en su protocolo y dará fe de haber confrontado los instrumentos con la matriz o el original.","394":"Art.394.- La escritura pública debe expresar: a) nombres y apellidos de las partes, estado civil, mayoría de edad, nacionalidad y domicilio; b) lugar y fecha; y c) la naturaleza y objeto del acto.","395":"Art.395.- Si las partes decidieren, después de firmada la escritura pero antes de hacerlo el escribano, corregirla o hacerle agregados, éstos sólo valdrán si fueren extendidos a continuación por aquél y suscriptos por todos.","396":"Art.396.- Son nulas las escrituras públicas si faltaren en ellas: a) la fecha y el lugar; b) los nombres de las partes; c) el objeto y naturaleza del acto; d) la mención de poderes habilitantes; e) la atestación del notario de conocer a las partes; f) la constancia de haber recibido personalmente las declaraciones; g) la firma de las partes; y h) las firmas del escribano y testigos.","397":"Art.397.- El escribano debe dar copia autorizada de la escritura a las partes que la solicitaren. Si éstas pidieren otros testimonios, los entregará haciendo constar en el protocolo esa circunstancia.","398":"Art.398.- La protocolización de documentos exigida por la ley sólo se hará en virtud de orden judicial. El notario deberá agregar el instrumento a su protocolo mediante un acta que contenga los datos necesarios para identificarlo.","399":"Art.399.- Los instrumentos privados podrán ser otorgados en cualquier día y redactados en la forma e idioma que las partes juzguen convenientes, pero la firma de ellas será indispensable para su validez, sin que sea permitido substituirla por signos o iniciales.","400":"Art.400.- Los instrumentos privados que contengan convenciones bilaterales deben redactarse en tantos ejemplares como partes haya con interés distinto, con expresión en cada uno del número de ejemplares suscritos.","401":"Art.401.- La omisión de los requisitos no perjudica la validez del acto: a) cuando un otorgante cumplió todas sus obligaciones; b) cuando otras pruebas demuestren que el acto fue concluido definitivamente; c) si las partes depositaron el instrumento en poder de un escribano; o d) cuando los otorgantes cumplieren con posterioridad las obligaciones contenidas.","402":"Art.402.- Los instrumentos privados pueden ser firmados en blanco antes de ser redactados y harán fe una vez llenados y reconocidas las firmas. El signatario podrá oponerse al contenido probando que no tuvo la intención de declarar lo que en él se consigna.","403":"Art.403.- Si el documento firmado en blanco hubiere sido sustraído o fraudulentamente obtenido y fuere llenado por un tercero en perjuicio del firmante, podrán admitirse todos los medios de prueba.","404":"Art.404.- Toda persona contra quien se presentare en juicio un instrumento privado cuya firma se le atribuye deberá declarar si la firma es o no suya. Si la firma no fuere conocida, se ordenará el cotejo.","405":"Art.405.- Ninguna persona que hubiere suscrito con iniciales o signos un instrumento privado podrá ser obligada a reconocerlos como su firma, pero podrá hacerlo voluntariamente, y en tal caso valdrán como su verdadera firma.","406":"Art.406.- No serán admitidos a reconocimiento los instrumentos privados cuyos firmantes fueren incapaces al tiempo de ser citados judicialmente para hacerlo, aun cuando al tiempo de suscribirlos hubieren sido capaces.","407":"Art.407.- El instrumento privado judicialmente reconocido tiene el mismo valor que el instrumento público entre los que lo han suscripto y sus sucesores.","408":"Art.408.- Los instrumentos privados reconocidos no prueban contra los terceros la verdad de la fecha expresada en ellos. Su fecha cierta será: la de su exhibición en juicio, su autenticación por escribano, su transcripción en registro público, o del fallecimiento del firmante.","409":"Art.409.- Las notas escritas o firmadas por el acreedor en el margen o dorso de un documento privado en poder del deudor, probarán para liberar a éste, mas no para establecer una obligación adicional.","410":"Art.410.- La carta que por su contenido sea confidencial a criterio del juez no podrá ser utilizada por un tercero en juicio y será rechazada de oficio.","411":"Art.411.- Las cartas dirigidas a una persona pueden ser presentadas por ella en juicio cuando constituyen un medio de demostración en litigio en que esté interesada.","412":"Art.412.- El valor probatorio de las cartas no depende de la observancia de forma alguna. Pueden ser admitidas aunque no estén firmadas, si son manuscritas o suscriptas con signos o iniciales.","413":"Art.413.- Los libros o registros domésticos de personas no comerciantes no constituyen prueba en su favor. Prueban contra ellas cuando enuncian un pago recibido o cuando contienen la mención de que la anotación se hizo para suplir la falta de título.","414":"Art.414.- Los telegramas sólo tendrán el valor probatorio de los instrumentos privados cuando el original existente en la oficina en que se despachó contuviere la firma del remitente.","415":"Art.415.- Las fotocopias de instrumentos privados obrantes en expedientes administrativos o judiciales que llevaren la certificación del funcionario competente serán consideradas como fiel reproducción de los originales.","416":"Art.416.- El reconocimiento o renovación de un acto jurídico hace plena prueba de las declaraciones contenidas en el acto original, si no se demuestra por la exhibición de este último que ha habido error en el reconocimiento o en la renovación."};
 
 const EXPLICS={
@@ -716,90 +558,86 @@ const EXPLICS={
 "416":"Si alguien reconoce o renueva un acto jurídico, ese reconocimiento hace plena prueba de lo que dijo el acto original. Solo puede desvirtuarse si se presenta el original y se demuestra que hubo error en el reconocimiento."
 };
 
-const SECS=[
+var SECS=[
   {id:'all',label:'Todos',range:[277,416]},
   {id:'v',label:'Actos Voluntarios',range:[277,295]},
-  {id:'j',label:'Actos Jurídicos',range:[296,317]},
+  {id:'j',label:'Actos Juridicos',range:[296,317]},
   {id:'m',label:'Modalidades',range:[318,353]},
   {id:'n',label:'Nulidad',range:[354,371]},
   {id:'d',label:'Ejercicio',range:[372,374]},
-  {id:'p',label:'Inst. Públicos',range:[375,398]},
-  {id:'r',label:'Inst. Privados',range:[399,416]},
+  {id:'p',label:'Inst. Publicos',range:[375,398]},
+  {id:'r',label:'Inst. Privados',range:[399,416]}
 ];
-const SUBS=[
+var SUBS=[
   {l:'Actos Voluntarios',f:277,t:284},{l:'Del Error',f:285,t:289},{l:'Del Dolo',f:290,t:292},
-  {l:'Fuerza e Intimidación',f:293,t:295},{l:'Actos Jurídicos',f:296,t:304},{l:'Simulación',f:305,t:310},
-  {l:'Fraude de Acreedores',f:311,t:317},{l:'La Condición',f:318,t:327},{l:'El Cargo',f:328,t:333},
-  {l:'El Plazo',f:334,t:342},{l:'Representación',f:343,t:353},{l:'Nulidad de Actos',f:355,t:365},
-  {l:'Confirmación',f:366,t:371},{l:'Ejercicio de Derechos',f:372,t:374},{l:'Inst. Públicos',f:375,t:388},
-  {l:'Escrituras Públicas',f:389,t:398},{l:'Inst. Privados',f:399,t:409},{l:'Cartas y Otros Medios',f:410,t:416},
+  {l:'Fuerza e Intimidacion',f:293,t:295},{l:'Actos Juridicos',f:296,t:304},{l:'Simulacion',f:305,t:310},
+  {l:'Fraude de Acreedores',f:311,t:317},{l:'La Condicion',f:318,t:327},{l:'El Cargo',f:328,t:333},
+  {l:'El Plazo',f:334,t:342},{l:'Representacion',f:343,t:353},{l:'Nulidad de Actos',f:355,t:365},
+  {l:'Confirmacion',f:366,t:371},{l:'Ejercicio de Derechos',f:372,t:374},{l:'Inst. Publicos',f:375,t:388},
+  {l:'Escrituras Publicas',f:389,t:398},{l:'Inst. Privados',f:399,t:409},{l:'Cartas y Otros',f:410,t:416}
 ];
-function secOf(n){return SECS.slice(1).find(s=>n>=s.range[0]&&n<=s.range[1])||SECS[1];}
+function secOf(n){for(var i=1;i<SECS.length;i++){if(n>=SECS[i].range[0]&&n<=SECS[i].range[1])return SECS[i];}return SECS[1];}
 
-let all=Object.entries(RAW).map(([n,t])=>({num:+n,text:t}));
-let shown=[...all],q='';
+var allArts=Object.keys(RAW).map(function(n){return{num:+n,text:RAW[n]};});
+var shown=allArts.slice(), q='';
 
 function buildFilters(){
-  const c=document.getElementById('filters');
-  SECS.forEach(s=>{
-    const b=document.createElement('button');
+  var c=document.getElementById('filters');
+  SECS.forEach(function(s){
+    var b=document.createElement('button');
     b.className='fb'+(s.id==='all'?' active':'');
     b.textContent=s.label;
-    b.onclick=()=>{
-      document.querySelectorAll('.fb').forEach(x=>x.classList.remove('active')); b.classList.add('active');
-      document.querySelectorAll('.chitem').forEach(x=>x.classList.remove('active'));
+    b.onclick=function(){
+      document.querySelectorAll('.fb').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      document.querySelectorAll('.chitem').forEach(function(x){x.classList.remove('active');});
       q=''; document.getElementById('searchInput').value='';
-      shown=s.id==='all'?[...all]:all.filter(a=>a.num>=s.range[0]&&a.num<=s.range[1]);
-      render(); scrollTop();
-    }; c.appendChild(b);
+      shown=s.id==='all'?allArts.slice():allArts.filter(function(a){return a.num>=s.range[0]&&a.num<=s.range[1];});
+      render(); document.querySelector('.art-body').scrollTop=0;
+    };
+    c.appendChild(b);
   });
 }
 
 function buildSidebar(){
-  const c=document.getElementById('chlist');
-  SUBS.forEach(s=>{
-    const el=document.createElement('div'); el.className='chitem';
-    el.innerHTML='<span class="chrange">'+s.f+'–'+s.t+'</span>'+s.l;
-    el.onclick=()=>{
-      document.querySelectorAll('.chitem').forEach(x=>x.classList.remove('active')); el.classList.add('active');
-      document.querySelectorAll('.fb').forEach(x=>x.classList.remove('active'));
+  var c=document.getElementById('chlist');
+  SUBS.forEach(function(s){
+    var el=document.createElement('div'); el.className='chitem';
+    el.innerHTML='<span class="chrange">'+s.f+'-'+s.t+'</span>'+s.l;
+    el.onclick=function(){
+      document.querySelectorAll('.chitem').forEach(function(x){x.classList.remove('active');});
+      el.classList.add('active');
+      document.querySelectorAll('.fb').forEach(function(x){x.classList.remove('active');});
       document.querySelector('.fb').classList.add('active');
       q=''; document.getElementById('searchInput').value='';
-      shown=all.filter(a=>a.num>=s.f&&a.num<=s.t); render(); scrollTop();
-    }; c.appendChild(el);
+      shown=allArts.filter(function(a){return a.num>=s.f&&a.num<=s.t;});
+      render(); document.querySelector('.art-body').scrollTop=0;
+    };
+    c.appendChild(el);
   });
 }
 
 function hl(t,q){
   if(!q)return t;
-  const e=q.replace(/[-.*+?^${}()|[\]\\]/g,'\\$&');
+  var e=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
   return t.replace(new RegExp('('+e+')','gi'),'<mark>$1</mark>');
 }
 
-function scrollTop(){
-  const body=document.querySelector('.art-body');
-  if(body) body.scrollTop=0;
-}
-
 function render(){
-  const c=document.getElementById('alist'),info=document.getElementById('infobar');
-  if(!shown.length){
-    c.innerHTML='<div class="empty">Sin resultados para &ldquo;<strong>'+q+'</strong>&rdquo;</div>';
-    info.textContent=''; return;
-  }
-  info.textContent=shown.length+' artículo'+(shown.length!==1?'s':'')+(q?' · "'+q+'"':'');
+  var c=document.getElementById('alist'), info=document.getElementById('infobar');
+  if(!shown.length){c.innerHTML='<div class="empty">Sin resultados para "'+q+'"</div>';info.textContent='';return;}
+  info.textContent=shown.length+' articulo'+(shown.length!==1?'s':'')+(q?' - "'+q+'"':'');
   c.innerHTML='';
   shown.forEach(function(art,i){
-    const sec=secOf(art.num),card=document.createElement('div');
+    var sec=secOf(art.num), card=document.createElement('div');
     card.className='acard'; card.id='a'+art.num;
-    card.style.animationDelay=Math.min(i*10,130)+'ms';
-    const hasExpl=!!EXPLICS[String(art.num)];
+    var hasExpl=!!EXPLICS[String(art.num)];
     card.innerHTML=
       '<div class="chead" onclick="tog('+art.num+')">'
         +'<span class="cnum">Art. '+art.num+'</span>'
         +'<span class="ctag">'+sec.label+'</span>'
         +'<div class="cact" onclick="event.stopPropagation()">'
-          +(hasExpl?'<button class="btn-expl" onclick="showExpl('+art.num+')">&#9432; Explicar</button>':'')
+          +(hasExpl?'<button class="btn-expl" onclick="showExpl('+art.num+')">Explicar</button>':'')
           +'<button class="btog" id="tb'+art.num+'">'
             +'<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>'
           +'</button>'
@@ -807,63 +645,51 @@ function render(){
       +'</div>'
       +'<div class="cbody" id="cb'+art.num+'">'
         +'<p class="art-text">'+hl(art.text,q)+'</p>'
-        +(hasExpl
-          ?'<div class="exbox" id="ex'+art.num+'">'
-            +'<div class="exlabel">Explicación sencilla</div>'
-            +'<div class="excontent">'+EXPLICS[String(art.num)]+'</div>'
-          +'</div>'
-          :'')
+        +(hasExpl?'<div class="exbox" id="ex'+art.num+'"><div class="exlabel">Explicacion sencilla</div><div class="excontent">'+EXPLICS[String(art.num)]+'</div></div>':'')
       +'</div>';
     c.appendChild(card);
   });
 }
 
-function tog(n){
-  document.getElementById('cb'+n).classList.toggle('open');
-  document.getElementById('tb'+n).classList.toggle('open');
-}
-function showExpl(n){
-  document.getElementById('cb'+n).classList.add('open');
-  document.getElementById('tb'+n).classList.add('open');
-  document.getElementById('ex'+n).classList.toggle('open');
-}
+function tog(n){document.getElementById('cb'+n).classList.toggle('open');document.getElementById('tb'+n).classList.toggle('open');}
+function showExpl(n){document.getElementById('cb'+n).classList.add('open');document.getElementById('tb'+n).classList.add('open');document.getElementById('ex'+n).classList.toggle('open');}
 
-let st;
+var st;
 document.getElementById('searchInput').addEventListener('input',function(){
-  clearTimeout(st); st=setTimeout(function(){
-    q=this.value.trim().toLowerCase();
+  clearTimeout(st); var val=this.value;
+  st=setTimeout(function(){
+    q=val.trim().toLowerCase();
     document.querySelectorAll('.fb').forEach(function(b){b.classList.remove('active');});
     document.querySelector('.fb').classList.add('active');
     document.querySelectorAll('.chitem').forEach(function(b){b.classList.remove('active');});
-    shown=q?all.filter(function(a){return a.text.toLowerCase().includes(q)||String(a.num).includes(q);}):all.slice();
+    shown=q?allArts.filter(function(a){return a.text.toLowerCase().indexOf(q)>-1||String(a.num).indexOf(q)>-1;}):allArts.slice();
     render();
-  }.bind(this),220);
+  },220);
 });
 
 function jumpTo(){
-  const n=parseInt(document.getElementById('jumpInput').value);
+  var n=parseInt(document.getElementById('jumpInput').value);
   if(!n||n<277||n>416)return;
-  if(!shown.find(function(a){return a.num===n;})){
-    shown=all.slice(); q='';
+  if(!shown.filter(function(a){return a.num===n;}).length){
+    shown=allArts.slice(); q='';
     document.getElementById('searchInput').value='';
     document.querySelectorAll('.fb').forEach(function(b){b.classList.remove('active');});
     document.querySelector('.fb').classList.add('active');
     render();
   }
   setTimeout(function(){
-    const el=document.getElementById('a'+n); if(!el)return;
+    var el=document.getElementById('a'+n); if(!el)return;
     el.scrollIntoView({behavior:'smooth',block:'center'});
     el.classList.add('hl');
     document.getElementById('cb'+n).classList.add('open');
     document.getElementById('tb'+n).classList.add('open');
-    const ex=document.getElementById('ex'+n); if(ex)ex.classList.add('open');
+    var ex=document.getElementById('ex'+n); if(ex)ex.classList.add('open');
     setTimeout(function(){el.classList.remove('hl');},2500);
-  },120);
+  },150);
 }
 document.getElementById('jumpInput').addEventListener('keydown',function(e){if(e.key==='Enter')jumpTo();});
 
 buildFilters(); buildSidebar(); render();
 </script>
-
 </body>
 </html>
